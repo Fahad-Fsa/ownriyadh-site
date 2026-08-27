@@ -6,134 +6,92 @@
       "name": "الجنادرية",
       "land": 1856,
       "villa": 936859,
-      "deals": 171,
+      "deals": 114,
       "trend": 11.5
     },
     {
       "name": "الرمال",
       "land": 2363,
       "villa": 1407904,
-      "deals": 311,
+      "deals": 205,
       "trend": 31.3
     },
     {
       "name": "الشفا",
       "land": 1491,
       "villa": 1093833,
-      "deals": 42,
+      "deals": 24,
       "trend": -29.3
     },
     {
       "name": "العارض",
       "land": 4526,
       "villa": 2815870,
-      "deals": 199,
+      "deals": 123,
       "trend": -5.9
     },
     {
       "name": "العزيزية",
       "land": 2618,
       "villa": 1148174,
-      "deals": 75,
+      "deals": 22,
       "trend": 0
     },
     {
       "name": "القيروان",
       "land": 6838,
       "villa": 3558975,
-      "deals": 93,
+      "deals": 67,
       "trend": -25.6
     },
     {
       "name": "الملقا",
       "land": 8990,
       "villa": 5354896,
-      "deals": 50,
+      "deals": 20,
       "trend": -20.2
     },
     {
       "name": "المهدية",
       "land": 2336,
       "villa": 2296582,
-      "deals": 94,
+      "deals": 54,
       "trend": -22
     },
     {
       "name": "النرجس",
       "land": 5979,
       "villa": 3511442,
-      "deals": 220,
+      "deals": 107,
       "trend": 36.1
     },
     {
       "name": "النسيم الغربي",
       "land": 2132,
       "villa": 1207340,
-      "deals": 51,
+      "deals": 26,
       "trend": 4.8
     },
     {
       "name": "النظيم",
       "land": 1427,
       "villa": 1046763,
-      "deals": 234,
+      "deals": 208,
       "trend": -2.7
     },
     {
       "name": "النهضة",
       "land": 4031,
       "villa": 2153761,
-      "deals": 80,
+      "deals": 51,
       "trend": 6.7
     },
     {
       "name": "بدر",
       "land": 1484,
       "villa": 1113179,
-      "deals": 70,
+      "deals": 20,
       "trend": 7.6
-    },
-    {
-      "name": "طويق - العتيقة",
-      "land": 1960,
-      "villa": 1076683,
-      "deals": 137,
-      "trend": 44.4
-    },
-    {
-      "name": "طويق - عرقة",
-      "land": 1960,
-      "villa": 1076683,
-      "deals": 137,
-      "trend": 44.4
-    },
-    {
-      "name": "طيبة",
-      "land": 1320,
-      "villa": 502864,
-      "deals": 457,
-      "trend": 1.1
-    },
-    {
-      "name": "ظهرة لبن",
-      "land": 2853,
-      "villa": 1577501,
-      "deals": 73,
-      "trend": -4.9
-    },
-    {
-      "name": "عريض",
-      "land": 711,
-      "villa": 545071,
-      "deals": 327,
-      "trend": -4.8
-    },
-    {
-      "name": "عكاظ",
-      "land": 1458,
-      "villa": 1362143,
-      "deals": 47,
-      "trend": -0.9
     },
     {
       "name": "نمار",
@@ -143,17 +101,45 @@
       "trend": -30.5
     },
     {
+      "name": "طيبة",
+      "land": 1320,
+      "villa": 502864,
+      "deals": 276,
+      "trend": 1.1
+    },
+    {
+      "name": "ظهرة لبن",
+      "land": 2853,
+      "villa": 1577501,
+      "deals": 32,
+      "trend": -4.9
+    },
+    {
+      "name": "عريض",
+      "land": 711,
+      "villa": 545071,
+      "deals": 296,
+      "trend": -4.8
+    },
+    {
+      "name": "عكاظ",
+      "land": 1458,
+      "villa": 1362143,
+      "deals": 27,
+      "trend": -0.9
+    },
+    {
       "name": "الجزيرة",
       "land": 1171,
       "villa": 928271,
-      "deals": 39,
+      "deals": 12,
       "trend": 24.3
     },
     {
       "name": "عريجاء الغربي",
       "land": 2541,
       "villa": 1024221,
-      "deals": 58,
+      "deals": 33,
       "trend": 12.8
     },
     {
@@ -167,7 +153,7 @@
       "name": "ديراب",
       "land": 1335,
       "villa": 533816,
-      "deals": 75,
+      "deals": 41,
       "trend": -2.9
     },
     {
@@ -209,14 +195,14 @@
       "name": "الفاروق",
       "land": 3348,
       "villa": 1476720,
-      "deals": 94,
+      "deals": 67,
       "trend": 6.4
     },
     {
       "name": "اليمامة",
       "land": 2016,
       "villa": 796455,
-      "deals": 43,
+      "deals": 21,
       "trend": 2.1
     },
     {
@@ -238,111 +224,902 @@
       "land": null,
       "villa": 1761732,
       "deals": 30,
-      "trend": null
+      "trend": -13.6
     },
     {
       "name": "الحزم",
       "land": null,
       "villa": 1223304,
       "deals": 19,
-      "trend": null
+      "trend": -10.5
     },
     {
       "name": "الخليج",
       "land": null,
       "villa": 1663977,
       "deals": 25,
-      "trend": null
+      "trend": -12.1
     },
     {
       "name": "الدار البيضاء",
       "land": null,
       "villa": 947313,
       "deals": 36,
-      "trend": null
+      "trend": 4.9
     },
     {
       "name": "الروضة",
       "land": null,
       "villa": 2505635,
       "deals": 21,
-      "trend": null
+      "trend": -2.1
     },
     {
       "name": "السويدي",
       "land": null,
       "villa": 1089661,
       "deals": 19,
-      "trend": null
+      "trend": 3.6
     },
     {
       "name": "العليا",
       "land": null,
       "villa": 3467631,
       "deals": 29,
-      "trend": null
+      "trend": -13.9
     },
     {
       "name": "القادسية",
       "land": null,
       "villa": 1666375,
       "deals": 22,
-      "trend": null
+      "trend": 5.9
     },
     {
       "name": "المونسية",
       "land": null,
       "villa": 1994690,
       "deals": 38,
-      "trend": null
+      "trend": -10.5
     },
     {
       "name": "الياسمين",
       "land": null,
       "villa": 2424447,
       "deals": 42,
-      "trend": null
+      "trend": -2.9
     },
     {
       "name": "اليرموك",
       "land": null,
       "villa": 1797074,
       "deals": 23,
-      "trend": null
+      "trend": 4.8
     },
     {
       "name": "عرقة",
       "land": null,
       "villa": 3047615,
       "deals": 23,
-      "trend": null
+      "trend": -38.2
     },
     {
       "name": "الأندلس",
       "land": null,
       "villa": 1730103,
       "deals": 18,
-      "trend": null
+      "trend": -34
     },
     {
       "name": "الربوة",
       "land": null,
       "villa": 2135857,
       "deals": 21,
-      "trend": null
+      "trend": -15.4
     },
     {
       "name": "المصيف",
       "land": null,
       "villa": 3220563,
       "deals": 18,
-      "trend": null
+      "trend": -17
     },
     {
       "name": "ظهرة البديعة",
       "land": null,
       "villa": 1346141,
       "deals": 18,
+      "trend": -2.1
+    },
+    {
+      "name": "أحد",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "أم الحمام الشرقي - الديرة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "أم الحمام الشرقي - المعذر",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "أم الحمام الغربي",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "أم سليم",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الأمير عبدالله",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الإزدهار",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الإسكان",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "البديعة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "البطيحا",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "التعاون",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الجرادية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الحائر",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الحمراء",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الخالدية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الخزامى",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الدرهمية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الدفاع",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الديرة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الرائد",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الربيع",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الرحمانية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الرفيعة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الرماية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الروابي",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الريان",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الزهراء",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الزهرة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السعادة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السعية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السفارات",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السلام",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السلطانة - الديرة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السلطانة - عريجاء",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السلي",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السليمانية - العليا",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السليمانية - الملز والبطحاء",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "السويدي الغربي",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الشرفية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الصالحية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الصحافة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الصناعية الجديدة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الصناعية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الضباط",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الضبيعة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "العتيقة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "العقيق",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "العليا - المعذر",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "العليا - الملز والبطحاء",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "العليشة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "العمل",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الغدير",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الفاخرية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الفلاح",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الفوطة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الفيحاء",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الفيصلية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "القدس",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المؤتمرات",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المحمدية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المربع",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المرسلات",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المرقب",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المروة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المروج",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المصانع",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المعذر الشمالي",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المعذر",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المعيزيلة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المغرزات",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الملز",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الملك عبدالعزيز",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الملك فهد",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الملك فيصل",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المناخ",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المنار",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المنصورة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "المنصورية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الناصرية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "النخيل",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الندى",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "النزهة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "النسيم الشرقي",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "النفل",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "النموذجية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "النور",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الهدا - الديرة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الهدا - المعذر",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الواحة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الوادي",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الورود",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الوزارات",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الوسطى",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "الوشام",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "بنبان",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "ثليم",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "جامعة الإمام محمد بن سعود الإسلامية",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "جامعة الملك سعود",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "جبرة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "جرير",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "حطين",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "شبرا",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "صلاح الدين",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "طويق - العتيقة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "طويق - عرقة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "ظهرة نمار",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "عريجاء الوسطى",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "عريجاء",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "قرطبة",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "قري",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "ميكال",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "هجرة وادي لبن",
+      "land": null,
+      "villa": null,
+      "deals": null,
+      "trend": null
+    },
+    {
+      "name": "هيت",
+      "land": null,
+      "villa": null,
+      "deals": null,
       "trend": null
     }
   ]

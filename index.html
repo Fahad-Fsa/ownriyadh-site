@@ -381,6 +381,7 @@ html.dark .dist { stroke: #0A1A17; }
 .dist:hover { stroke-width: 2; stroke: var(--gold); }
 .dist.sel { stroke: var(--gold); stroke-width: 2.5; }
 .dist.dim { opacity: 0.18; }
+.dist.nodata { fill: var(--border-2); }
 .dlabel {
   font-family: 'Almarai', sans-serif;
   font-size: 11px;
@@ -465,6 +466,8 @@ html.dark #mapTip { background: var(--gold); color: #0A1A17; }
   margin-bottom: 4px;
 }
 .legend-labels { display: flex; justify-content: space-between; color: var(--muted); font-size: 10px; }
+.legend-nodata { display: flex; align-items: center; gap: 5px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--muted); font-size: 10px; }
+.legend-nodata .sw { width: 10px; height: 10px; border-radius: 3px; background: var(--border-2); flex-shrink: 0; }
 
 /* ---- Detail Panel (slide-in from right) ---- */
 .detail-panel {
@@ -557,6 +560,7 @@ html.dark #mapTip { background: var(--gold); color: #0A1A17; }
 }
 .stat-value.v.up { color: var(--success); }
 .stat-value.v.down { color: var(--danger); }
+.stat-value.nodata { font-size: 12.5px; font-weight: 700; color: var(--muted); line-height: 1.4; }
 
 .detail-cta {
   width: 100%;
@@ -1020,6 +1024,7 @@ html.dark .carousel-card.final { background: #1a3d36; }
             <div class="legend-title">سعر المتر (ريال/م²)</div>
             <div class="legend-bar"></div>
             <div class="legend-labels"><span>منخفض</span><span>مرتفع</span></div>
+            <div class="legend-nodata"><span class="sw"></span><span>لا تتوفر بيانات كافية</span></div>
           </div>
         </div>
       </section>
@@ -1376,7 +1381,7 @@ html.dark .carousel-card.final { background: #1a3d36; }
     window.addEventListener('touchend', endPan);
   }
 
-  var lands = MAP.districts.map(function(d){ return d.land; });
+  var lands = MAP.districts.map(function(d){ return d.land; }).filter(function(v){ return v != null; });
   var lo = Math.min.apply(null, lands), hi = Math.max.apply(null, lands);
   function L(a,b,t){ return a + (b-a) * t; }
   function scaleColor(t){
@@ -1384,6 +1389,15 @@ html.dark .carousel-card.final { background: #1a3d36; }
     if(t < 0.5){ var u=t/0.5; c=[L(s1[0],s2[0],u),L(s1[1],s2[1],u),L(s1[2],s2[2],u)]; }
     else{ var u=(t-0.5)/0.5; c=[L(s2[0],s3[0],u),L(s2[1],s3[1],u),L(s2[2],s3[2],u)]; }
     return 'rgb(' + c.map(Math.round).join(',') + ')';
+  }
+  function paintDistrict(d){
+    if(d.land == null){
+      d._el.classList.add('nodata');
+      d._el.removeAttribute('fill');
+    } else {
+      d._el.classList.remove('nodata');
+      d._el.setAttribute('fill', scaleColor((d.land - lo) / (hi - lo || 1)));
+    }
   }
   function area(path){
     var nums = path.replace(/[MLZ]/g,' ').trim().split(/[\s,]+/).map(Number);
@@ -1395,11 +1409,11 @@ html.dark .carousel-card.final { background: #1a3d36; }
   MAP.districts.forEach(function(d, i){
     var p = document.createElementNS(SVGNS,'path');
     p.setAttribute('d', d.path);
-    p.setAttribute('fill', scaleColor((d.land - lo) / (hi - lo || 1)));
     p.setAttribute('class', 'dist');
     p.setAttribute('data-i', i);
     d._area = area(d.path);
     svg.appendChild(p); d._el = p;
+    paintDistrict(d);
   });
   var areas = MAP.districts.map(function(d){ return d._area; }).sort(function(a,b){ return b-a; });
   var thr = areas[Math.min(areas.length-1, 54)];
@@ -1425,6 +1439,12 @@ html.dark .carousel-card.final { background: #1a3d36; }
   function trendHTML(d){
     return (d.trend >= 0 ? '▲ +' : '▼ ') + Math.abs(d.trend) + '%';
   }
+  var NODATA_TEXT = 'لا تتوفر بيانات كافية';
+  function setStat(el, html, isEmpty){
+    if(!el) return;
+    el.classList.toggle('nodata', !!isEmpty);
+    el.innerHTML = isEmpty ? NODATA_TEXT : html;
+  }
   function fillPanel(prefix, d){
     var name = document.getElementById('mpName' + prefix);
     var tags = document.getElementById('mpTags' + prefix);
@@ -1434,10 +1454,13 @@ html.dark .carousel-card.final { background: #1a3d36; }
     var trend = document.getElementById('mpTrend' + prefix);
     if(name) name.textContent = d.name;
     if(tags) tags.innerHTML = tagsHTML(d);
-    if(land) land.innerHTML = fmt(d.land) + ' <small>ريال/م²</small>';
-    if(villa) villa.innerHTML = (d.villa/1e6).toFixed(2) + ' <small>مليون ريال</small>';
-    if(deals) deals.innerHTML = fmt(d.deals) + ' <small>صفقة</small>';
-    if(trend){ trend.className = 'stat-value v ' + (d.trend >= 0 ? 'up' : 'down'); trend.innerHTML = trendHTML(d); }
+    setStat(land, d.land != null ? (fmt(d.land) + ' <small>ريال/م²</small>') : '', d.land == null);
+    setStat(villa, d.villa != null ? ((d.villa/1e6).toFixed(2) + ' <small>مليون ريال</small>') : '', d.villa == null);
+    setStat(deals, d.deals != null ? (fmt(d.deals) + ' <small>صفقة</small>') : '', d.deals == null);
+    if(trend){
+      if(d.trend == null){ trend.className = 'stat-value v nodata'; trend.innerHTML = NODATA_TEXT; }
+      else { trend.className = 'stat-value v ' + (d.trend >= 0 ? 'up' : 'down'); trend.innerHTML = trendHTML(d); }
+    }
   }
 
   function select(d){
@@ -1468,7 +1491,7 @@ html.dark .carousel-card.final { background: #1a3d36; }
       var d = MAP.districts[+t.getAttribute('data-i')];
       var r = stage.getBoundingClientRect();
       tip.style.left = (e.clientX - r.left) + 'px'; tip.style.top = (e.clientY - r.top) + 'px';
-      tip.innerHTML = d.name + ' · <b>' + fmt(d.land) + '</b> ريال/م²';
+      tip.innerHTML = d.land != null ? (d.name + ' · <b>' + fmt(d.land) + '</b> ريال/م²') : (d.name + ' · لا تتوفر بيانات كافية');
       tip.style.opacity = '1';
     } else { tip.style.opacity = '0'; }
   });
@@ -1535,17 +1558,22 @@ html.dark .carousel-card.final { background: #1a3d36; }
 
   // Live data override (fetch data.json if available)
   function recolor(){
-    var ls = MAP.districts.map(function(d){ return d.land; });
+    var ls = MAP.districts.map(function(d){ return d.land; }).filter(function(v){ return v != null; });
     lo = Math.min.apply(null, ls); hi = Math.max.apply(null, ls);
-    MAP.districts.forEach(function(d){ d._el.setAttribute('fill', scaleColor((d.land - lo) / (hi - lo || 1))); });
+    MAP.districts.forEach(function(d){ paintDistrict(d); });
   }
   fetch('data.json', {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
     if(!j || !j.districts) return;
     var idx = {}; j.districts.forEach(function(d){ idx[d.name] = d; });
     MAP.districts.forEach(function(d){
       var n = idx[d.name];
-      if(n){ if(n.land!=null) d.land = n.land; if(n.villa!=null) d.villa = n.villa;
-             if(n.deals!=null) d.deals = n.deals; if(n.trend!=null) d.trend = n.trend; }
+      if(!n) return;
+      // Fields explicitly present in data.json (including null) replace the baked-in demo value,
+      // so districts with no real 2026 data show as "insufficient" instead of stale placeholders.
+      if('land' in n) d.land = n.land;
+      if('villa' in n) d.villa = n.villa;
+      if('deals' in n) d.deals = n.deals;
+      if('trend' in n) d.trend = n.trend;
     });
     recolor();
     var demo = document.querySelector('.map-badge.demo');
