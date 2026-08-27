@@ -506,7 +506,6 @@ html.dark #mapTip { background: var(--gold); color: #0A1A17; }
   color: var(--muted);
   font-weight: 700;
 }
-.mp-tag.period { background: rgba(180, 146, 75, 0.14); color: var(--gold-2); }
 .close-btn {
   width: 32px; height: 32px;
   border-radius: 8px;
@@ -953,7 +952,6 @@ html.dark .carousel-card.final { background: #1a3d36; }
           <div class="map-title-wrap">
             <div class="map-title">خريطة أحياء الرياض</div>
             <span class="map-badge demo">بيانات تجريبية</span>
-            <span id="mapUpdated" style="font-size:10px;color:var(--muted);"></span>
           </div>
           <div id="mapFilters">
             <button class="mchip" data-f="all" aria-pressed="true">الكل</button>
@@ -1435,7 +1433,6 @@ html.dark .carousel-card.final { background: #1a3d36; }
     var t = '';
     t += d.north ? '<span class="mp-tag">شمال الرياض</span>' : '<span class="mp-tag">جنوب الرياض</span>';
     t += d.east ? '<span class="mp-tag">شرق الرياض</span>' : '<span class="mp-tag">غرب الرياض</span>';
-    if(d.period) t += '<span class="mp-tag period">بيانات ' + d.period + '</span>';
     return t;
   }
   function trendHTML(d){
@@ -1576,13 +1573,10 @@ html.dark .carousel-card.final { background: #1a3d36; }
       if('villa' in n) d.villa = n.villa;
       if('deals' in n) d.deals = n.deals;
       if('trend' in n) d.trend = n.trend;
-      if('period' in n) d.period = n.period;
     });
     recolor();
     var demo = document.querySelector('.map-badge.demo');
     if(demo){ demo.textContent = 'بيانات محدّثة'; demo.classList.add('live'); demo.classList.remove('demo'); }
-    var upd = document.getElementById('mapUpdated');
-    if(upd && j.updated){ upd.textContent = ' · آخر تحديث: ' + j.updated; }
     if(selected) select(selected);
   }).catch(function(){});
 
