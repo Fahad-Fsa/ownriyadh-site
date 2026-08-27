@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OwnRiyadh — حلّل سعر عقارك مجانًا في الرياض</title>
+<meta name="description" content="منصة OwnRiyadh لتحليل سعر السوق العقاري في أحياء الرياض. اعرف سعر عقارك في السوق مجانًا بالكامل بدون رسوم أو التزام.">
+<meta name="theme-color" content="#0F2E29">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   1) RESET & VARIABLES
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+:root {
+  --green: #0F2E29;
+  --green-2: #163d36;
+  --bg: #FAF6EE;
+  --bg-2: #F3ECDC;
+  --gold: #B4924B;
+  --gold-2: #9a7a3a;
+  --text: #0F2E29;
+  --muted: #5a6b67;
+  --card: #ffffff;
+  --card-2: #fbf7ed;
+  --border: rgba(15, 46, 41, 0.10);
+  --border-2: rgba(15, 46, 41, 0.18);
+  --shadow: 0 10px 30px rgba(15, 46, 41, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 46, 41, 0.18);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 20px;
+  --success: #2f8f5f;
+  --danger: #b23b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --green: #E8DFC7;
+    --green-2: #C9A85E;
+    --bg: #0A1A17;
+    --bg-2: #0F2520;
+    --gold: #C9A85E;
+    --gold-2: #d9b970;
+    --text: #FAF6EE;
+    --muted: #9fb0ab;
+    --card: #132925;
+    --card-2: #0F2520;
+    --border: rgba(250, 246, 238, 0.08);
+    --border-2: rgba(250, 246, 238, 0.16);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+    --success: #4caf7a;
+    --danger: #e06a6a;
+  }
+}
+html.dark {
+  --green: #E8DFC7;
+  --green-2: #C9A85E;
+  --bg: #0A1A17;
+  --bg-2: #0F2520;
+  --gold: #C9A85E;
+  --gold-2: #d9b970;
+  --text: #FAF6EE;
+  --muted: #9fb0ab;
+  --card: #132925;
+  --card-2: #0F2520;
+  --border: rgba(250, 246, 238, 0.08);
+  --border-2: rgba(250, 246, 238, 0.16);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --success: #4caf7a;
+  --danger: #e06a6a;
+}
+
+body {
+  font-family: 'Almarai', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ============================================================
+   2) APP LAYOUT — 100dvh, no scroll
+   ============================================================ */
+.app {
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  height: 56px;
+  flex-shrink: 0;
+}
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  direction: ltr;
+}
+.logo .own { color: var(--green); }
+html.dark .logo .own { color: #E8DFC7; }
+.logo .riyadh { color: var(--gold); }
+
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.icon-btn {
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  background: var(--bg-2);
+  color: var(--text);
+  transition: all 0.2s;
+}
+.icon-btn:hover { background: var(--border-2); }
+.icon-btn svg { width: 18px; height: 18px; }
+
+/* Main grid: top-row (map + form) + bottom-row (carousel) */
+.main {
+  display: grid;
+  grid-template-rows: minmax(0, 64fr) minmax(0, 36fr);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ============================================================
+   3) TOP ROW — Map (right/first in RTL) + Form (left/second)
+   ============================================================ */
+.top-row {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ---- Form Panel (left side in RTL = second column) ---- */
+.form-panel {
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.form-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.form-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.form-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Stepper */
+.stepper {
+  display: flex;
+  gap: 6px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.step-dot {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-2);
+  transition: background 0.3s;
+}
+.step-dot.active { background: var(--gold); }
+.step-dot.done { background: var(--green); }
+html.dark .step-dot.done { background: var(--gold); }
+
+/* Steps container */
+.steps-wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 20px;
+  scrollbar-width: thin;
+}
+.steps-wrap::-webkit-scrollbar { width: 6px; }
+.steps-wrap::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+.step { display: none; animation: fadeIn 0.3s ease; }
+.step.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-label {
+  font-size: 12px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+.step-question {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+/* Step 1 dropdowns (purpose / property type) */
+select.field-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6b67' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 12px center;
+  background-size: 16px;
+  padding-left: 34px;
+  cursor: pointer;
+}
+
+/* Form fields */
+.field { margin-bottom: 12px; }
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.field-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+.field-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(180, 146, 75, 0.12);
+}
+.field-input::placeholder { color: var(--muted); opacity: 0.7; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.field-error { font-size: 11px; color: var(--danger); margin-top: 4px; display: none; }
+.field-error.show { display: block; }
+
+/* Form footer */
+.form-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  background: var(--card);
+}
+.btn {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-primary { background: var(--gold); color: #fff; }
+.btn-primary:hover { background: var(--gold-2); transform: translateY(-1px); }
+.btn-secondary { background: var(--bg-2); color: var(--text); }
+.btn-secondary:hover { background: var(--border); }
+.btn-whatsapp { background: #25D366; color: #fff; }
+.btn-whatsapp:hover { background: #1ebe5a; }
+
+/* ---- Map Section (right side in RTL = first column) ---- */
+.map-section {
+  position: relative;
+  background: var(--bg-2);
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Map header with filters */
+.map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.map-title-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.map-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+.map-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: var(--bg-2);
+  color: var(--muted);
+  font-weight: 700;
+}
+.map-badge.live { background: rgba(47, 143, 95, 0.12); color: var(--success); }
+
+#mapFilters { display: flex; gap: 6px; flex-wrap: wrap; }
+.mchip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--bg-2);
+  color: var(--muted);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.mchip:hover { color: var(--text); }
+.mchip[aria-pressed="true"] {
+  background: var(--green);
+  color: var(--bg);
+  border-color: var(--green);
+}
+html.dark .mchip[aria-pressed="true"] {
+  background: var(--gold);
+  color: #0A1A17;
+  border-color: var(--gold);
+}
+
+/* Map stage */
+.map-stage {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+#mapSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.dist {
+  stroke: var(--bg);
+  stroke-width: 0.8;
+  cursor: pointer;
+  transition: opacity 0.25s, stroke-width 0.2s;
+}
+html.dark .dist { stroke: #0A1A17; }
+.dist:hover { stroke-width: 2; stroke: var(--gold); }
+.dist.sel { stroke: var(--gold); stroke-width: 2.5; }
+.dist.dim { opacity: 0.18; }
+.dlabel {
+  font-family: 'Almarai', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  fill: #fff;
+  pointer-events: none;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgba(0,0,0,0.4);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+/* Tooltip */
+#mapTip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--green);
+  color: var(--bg);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+  transform: translate(-50%, -120%);
+  z-index: 5;
+  box-shadow: var(--shadow);
+}
+html.dark #mapTip { background: var(--gold); color: #0A1A17; }
+
+/* Zoom controls */
+.map-zoom {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 4;
+}
+.zoom-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+  transition: background 0.2s, color 0.2s;
+}
+.zoom-btn:hover { background: var(--gold); color: #fff; }
+.zoom-btn svg { width: 15px; height: 15px; }
+.map-stage.panning { cursor: grabbing; }
+.map-stage.pannable .dist { cursor: grab; }
+
+/* Legend */
+.map-legend {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 11px;
+  box-shadow: var(--shadow);
+  z-index: 3;
+}
+.legend-title { font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.legend-bar {
+  width: 140px;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(to left, rgb(201,154,63), rgb(138,160,63), rgb(31,107,79));
+  margin-bottom: 4px;
+}
+.legend-labels { display: flex; justify-content: space-between; color: var(--muted); font-size: 10px; }
+
+/* ---- Detail Panel (slide-in from right) ---- */
+.detail-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.detail-panel.open { transform: translateX(0); }
+
+.detail-head {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.detail-name { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
+.detail-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.mp-tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: var(--bg-2);
+  color: var(--muted);
+  font-weight: 700;
+}
+.close-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--bg-2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.close-btn:hover { background: var(--border-2); color: var(--text); }
+.close-btn svg { width: 16px; height: 16px; }
+
+.detail-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  scrollbar-width: thin;
+}
+.detail-body::-webkit-scrollbar { width: 6px; }
+.detail-body::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+.stat-value small {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+.stat-value.v.up { color: var(--success); }
+.stat-value.v.down { color: var(--danger); }
+
+.detail-cta {
+  width: 100%;
+  padding: 13px;
+  background: var(--gold);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.detail-cta:hover { background: var(--gold-2); transform: translateY(-1px); }
+
+#mpEmpty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  pointer-events: none;
+  z-index: 2;
+}
+#mpEmpty svg { width: 48px; height: 48px; opacity: 0.4; margin-bottom: 8px; }
+
+/* ============================================================
+   4) BOTTOM ROW — Carousel
+   ============================================================ */
+.carousel-row {
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  min-height: 0;
+}
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 14px;
+  padding: 14px 20px;
+}
+.carousel-card {
+  flex: 0 0 calc((100% - 56px) / 5);
+  min-width: 0;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.carousel-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.card-num {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--gold);
+  font-family: 'Poppins', sans-serif;
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+  padding-left: 32px;
+  line-height: 1.3;
+}
+.card-body {
+  flex: 1;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+  overflow: hidden;
+}
+.card-body p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+}
+.card-body ul { list-style: none; padding: 0; }
+.card-body li {
+  padding: 3px 0;
+  padding-right: 14px;
+  position: relative;
+  font-size: 11.5px;
+}
+.card-body li::before {
+  content: '•';
+  position: absolute;
+  right: 0;
+  color: var(--gold);
+  font-weight: 800;
+}
+.card-cta {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--gold);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+.card-cta:hover { background: var(--gold-2); }
+.card-cta.ghost {
+  background: transparent;
+  color: var(--gold);
+  border: 1.5px solid var(--gold);
+}
+.card-cta.ghost:hover { background: var(--gold); color: #fff; }
+
+/* Hero card */
+.carousel-card.hero {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-2) 100%);
+  color: var(--bg);
+  border: none;
+}
+html.dark .carousel-card.hero {
+  background: linear-gradient(135deg, #1a3d36 0%, #0F2520 100%);
+  color: var(--bg);
+}
+.carousel-card.hero .card-title { color: var(--bg); font-size: 17px; padding-left: 36px; }
+.carousel-card.hero .card-body { color: rgba(250, 246, 238, 0.85); font-size: 12px; }
+.carousel-card.hero .card-cta { background: var(--gold); color: #fff; }
+.carousel-card.hero .card-cta.ghost { background: transparent; color: var(--bg); border-color: rgba(250,246,238,0.4); }
+.carousel-card.hero .card-num { background: var(--gold); color: #fff; border-color: var(--gold); }
+
+/* Stuck card */
+.carousel-card.stuck {
+  background: linear-gradient(135deg, #2f8f5f 0%, #1f6b45 100%);
+  color: #fff;
+  border: none;
+}
+.carousel-card.stuck .card-title { color: #fff; }
+.carousel-card.stuck .card-body { color: rgba(255,255,255,0.9); }
+.carousel-card.stuck .card-num { background: #fff; color: #2f8f5f; border-color: #fff; }
+
+/* Sub-cards */
+.sub-cards { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.sub-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+}
+.sub-card-title { font-weight: 800; color: var(--text); font-size: 11.5px; margin-bottom: 2px; }
+.sub-card-desc { color: var(--muted); font-size: 10.5px; line-height: 1.4; }
+
+/* Final CTA card */
+.carousel-card.final {
+  background: var(--green);
+  color: var(--bg);
+  border: none;
+}
+html.dark .carousel-card.final { background: #1a3d36; }
+.carousel-card.final .card-title { color: var(--bg); font-size: 15px; padding-left: 36px; }
+.carousel-card.final .card-body { color: rgba(250,246,238,0.8); }
+.carousel-card.final .card-cta { background: var(--gold); color: #fff; }
+.carousel-card.final .card-num { background: var(--gold); color: #fff; border-color: var(--gold); }
+
+/* Articles list */
+.articles-list { display: grid; gap: 6px; }
+.article-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 11px;
+}
+.article-item:last-child { border-bottom: none; }
+.article-title { color: var(--text); font-weight: 700; }
+.soon-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  background: var(--gold);
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Carousel controls */
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 20px 12px;
+  flex-shrink: 0;
+}
+.carousel-arrow {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg-2);
+  color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.carousel-arrow:hover { background: var(--gold); color: #fff; }
+.carousel-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+.carousel-arrow svg { width: 14px; height: 14px; }
+.carousel-dots { display: flex; gap: 6px; }
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border-2);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.dot.active { background: var(--gold); width: 20px; border-radius: 4px; }
+
+/* ============================================================
+   5) MOBILE — Collapsed form + bottom sheets
+   ============================================================ */
+.mobile-form-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.mobile-form-bar .bar-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--gold);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.mobile-form-bar .bar-icon svg { width: 16px; height: 16px; }
+.mobile-form-bar .bar-text {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.mobile-form-bar .bar-arrow {
+  color: var(--muted);
+  transform: rotate(180deg);
+}
+.mobile-form-bar .bar-arrow svg { width: 14px; height: 14px; }
+
+/* Bottom sheet backdrop */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 26, 23, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.sheet-backdrop.show { opacity: 1; pointer-events: auto; }
+
+/* Bottom sheet */
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85dvh;
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  z-index: 51;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.bottom-sheet.show { transform: translateY(0); }
+.sheet-handle {
+  width: 40px; height: 4px;
+  background: var(--border-2);
+  border-radius: 2px;
+  margin: 10px auto 6px;
+  flex-shrink: 0;
+}
+.sheet-head {
+  padding: 6px 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sheet-title { font-size: 16px; font-weight: 800; }
+.sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  scrollbar-width: thin;
+}
+.sheet-body::-webkit-scrollbar { width: 6px; }
+.sheet-body::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+/* Mobile detail sheet */
+.detail-sheet { display: none; }
+
+@media (max-width: 900px) {
+  .top-row { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .form-panel { display: none; }
+  .mobile-form-bar { display: flex; }
+  .map-section { grid-row: 2; }
+  .carousel-card { flex: 0 0 calc((100% - 28px) / 2); }
+  .detail-panel { display: none; }
+  .detail-sheet { display: flex; }
+  .map-legend { bottom: 10px; right: 10px; padding: 8px 10px; }
+  .legend-bar { width: 100px; }
+  .dlabel { font-size: 9px; stroke-width: 2; }
+}
+
+@media (max-width: 520px) {
+  .header { padding: 8px 14px; height: 50px; }
+  .logo { font-size: 19px; }
+  .carousel-card { flex: 0 0 calc(100% - 40px); }
+  .carousel-track { padding: 12px 14px; gap: 10px; }
+  .map-header { padding: 10px 12px; }
+  .map-title { font-size: 13px; }
+  .mchip { padding: 5px 10px; font-size: 11px; }
+}
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <div class="logo">
+      <span class="own">Own</span><span class="riyadh">Riyadh</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="تبديل الوضع">
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg id="iconMoon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <!-- ======== TOP ROW ======== -->
+    <div class="top-row">
+
+      <!-- Map Section (FIRST in RTL = right side visually) -->
+      <section class="map-section">
+        <div class="map-header">
+          <div class="map-title-wrap">
+            <div class="map-title">خريطة أحياء الرياض</div>
+            <span class="map-badge demo">بيانات تجريبية</span>
+            <span id="mapUpdated" style="font-size:10px;color:var(--muted);"></span>
+          </div>
+          <div id="mapFilters">
+            <button class="mchip" data-f="all" aria-pressed="true">الكل</button>
+            <button class="mchip" data-f="north" aria-pressed="false">شمال</button>
+            <button class="mchip" data-f="south" aria-pressed="false">جنوب</button>
+            <button class="mchip" data-f="east" aria-pressed="false">شرق</button>
+            <button class="mchip" data-f="west" aria-pressed="false">غرب</button>
+          </div>
+        </div>
+
+        <div class="map-stage" id="mapStage">
+          <svg id="mapSvg" preserveAspectRatio="xMidYMid meet"></svg>
+          <div id="mapTip"></div>
+
+          <div id="mpEmpty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>اضغط على أي حي لعرض تفاصيله</div>
+          </div>
+
+          <!-- Zoom controls -->
+          <div class="map-zoom">
+            <button class="zoom-btn" id="zoomIn" aria-label="تكبير الخريطة" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <button class="zoom-btn" id="zoomReset" aria-label="إعادة ضبط التكبير" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 3.5 7.1"/><polyline points="3 20 3 13 10 13"/></svg>
+            </button>
+            <button class="zoom-btn" id="zoomOut" aria-label="تصغير الخريطة" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+
+          <!-- Detail Panel (Desktop) -->
+          <aside class="detail-panel" id="detailPanel">
+            <div class="detail-head">
+              <div style="flex:1;min-width:0;">
+                <div class="detail-name" id="mpName">—</div>
+                <div class="detail-tags" id="mpTags"></div>
+              </div>
+              <button class="close-btn" id="closeDetail" aria-label="إغلاق">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="detail-body">
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-label">سعر المتر</div>
+                  <div class="stat-value" id="mpLand">—</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">متوسط الفيلا</div>
+                  <div class="stat-value" id="mpVilla">—</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">آخر ٩٠ يوم</div>
+                  <div class="stat-value" id="mpDeals">—</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">اتجاه السعر</div>
+                  <div class="stat-value v" id="mpTrend">—</div>
+                </div>
+              </div>
+              <button class="detail-cta" id="mpCta">حلّل عقارك في هذا الحي</button>
+            </div>
+          </aside>
+
+          <!-- Legend -->
+          <div class="map-legend">
+            <div class="legend-title">سعر المتر (ريال/م²)</div>
+            <div class="legend-bar"></div>
+            <div class="legend-labels"><span>منخفض</span><span>مرتفع</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mobile collapsed form bar -->
+      <button class="mobile-form-bar" id="openFormSheet">
+        <span class="bar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v4H3zM3 10h18v4H3zM3 17h18v4H3z"/></svg>
+        </span>
+        <span class="bar-text">حلّل سعر عقارك مجانًا</span>
+        <span class="bar-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+
+      <!-- Form Panel (SECOND in RTL = left side visually) -->
+      <aside class="form-panel" id="formPanel">
+        <div class="form-header">
+          <div class="form-title">حلّل سعر عقارك</div>
+          <div class="form-subtitle">خدمة مجانية بالكامل • بدون التزام</div>
+        </div>
+        <div class="stepper">
+          <div class="step-dot active" data-step="1"></div>
+          <div class="step-dot" data-step="2"></div>
+          <div class="step-dot" data-step="3"></div>
+        </div>
+        <div class="steps-wrap">
+
+          <!-- STEP 1 -->
+          <div class="step active" data-step="1">
+            <div class="step-label">الخطوة ١ من ٣</div>
+            <div class="field">
+              <label class="field-label" for="fPurpose">وش تبي تسوي؟</label>
+              <select class="field-input" id="fPurpose">
+                <option value="" disabled selected>اختر...</option>
+                <option value="sell">أبي أبيع</option>
+                <option value="buy">أبي أشتري</option>
+                <option value="stuck">عقاري متعثر</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="fType">نوع العقار</label>
+              <select class="field-input" id="fType">
+                <option value="" disabled selected>اختر...</option>
+                <option value="villa">فيلا</option>
+                <option value="land">أرض</option>
+                <option value="apartment">شقة</option>
+                <option value="commercial">تجاري</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="step" data-step="2">
+            <div class="step-label">الخطوة ٢ من ٣</div>
+            <div class="step-question">تفاصيل العقار</div>
+
+            <div class="field">
+              <label class="field-label">المدينة</label>
+              <input type="text" class="field-input" value="الرياض" readonly>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="fDistrict">الحي</label>
+              <input type="text" class="field-input" id="fDistrict" placeholder="اختر حي من الخريطة أو اكتب الاسم">
+              <div class="field-hint">💡 اضغط على الحي في الخريطة للتعبئة التلقائية</div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="fArea">المساحة (م²)</label>
+                <input type="number" class="field-input" id="fArea" placeholder="مثال: 450" min="1">
+              </div>
+              <div class="field">
+                <label class="field-label" for="fPrice">السعر المطلوب (اختياري)</label>
+                <input type="text" class="field-input" id="fPrice" placeholder="مثال: 2,500,000">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="fMapLink">رابط Google Maps (اختياري)</label>
+              <input type="url" class="field-input" id="fMapLink" placeholder="https://maps.google.com/...">
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="step" data-step="3">
+            <div class="step-label">الخطوة ٣ من ٣</div>
+            <div class="step-question">بيانات التواصل</div>
+
+            <div class="field">
+              <label class="field-label" for="fPhone">رقم الجوال</label>
+              <input type="tel" class="field-input" id="fPhone" placeholder="05xxxxxxxx" maxlength="10" inputmode="numeric">
+              <div class="field-error" id="phoneError">رقم الجوال يجب أن يبدأ بـ 05 وطوله 10 أرقام</div>
+              <div class="field-hint">بنرسل لك التحليل على هذا الرقم عبر واتساب</div>
+            </div>
+
+            <div style="background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-top: 14px;">
+              <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px;">ملخص طلبك:</div>
+              <div id="summary" style="font-size: 11.5px; color: var(--muted); line-height: 1.7;"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-footer">
+          <button class="btn btn-secondary" id="btnBack" style="display:none;">رجوع</button>
+          <button class="btn btn-primary" id="btnNext">التالي</button>
+          <button class="btn btn-whatsapp hidden" id="btnSubmit">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.52 3.48A11.94 11.94 0 0 0 12.04 0C5.46 0 .12 5.34.12 11.92c0 2.1.55 4.15 1.6 5.96L0 24l6.3-1.65a11.9 11.9 0 0 0 5.74 1.46h.01c6.58 0 11.92-5.34 11.92-11.92 0-3.18-1.24-6.17-3.45-8.41zM12.05 21.8h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.64-.24-.37a9.88 9.88 0 0 1-1.52-5.26c0-5.46 4.44-9.9 9.91-9.9 2.65 0 5.14 1.03 7.01 2.9a9.84 9.84 0 0 1 2.9 7c0 5.46-4.44 9.88-9.91 9.88zm5.43-7.41c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z"/></svg>
+            أرسل عبر واتساب
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ======== BOTTOM ROW — CAROUSEL ======== -->
+    <div class="carousel-row">
+      <div class="carousel-viewport" id="carouselViewport">
+        <div class="carousel-track" id="carouselTrack">
+
+          <!-- Card 1: Hero -->
+          <div class="carousel-card hero">
+            <span class="card-num">1</span>
+            <div class="card-title">كم يسوى عقارك؟</div>
+            <div class="card-body">
+              <p style="margin-bottom:10px;">تحليل سعر السوق لعقارك في الرياض — مجانًا بالكامل وبخطوات بسيطة.</p>
+              <button class="card-cta" data-scroll-form>حلّل سعر عقارك مجانًا</button>
+              <button class="card-cta ghost" style="margin-top:6px;">أبي أشتري عقار</button>
+              <p style="margin-top:10px;font-size:10.5px;opacity:0.85;">مجاني بالكامل • بدون رسوم • بدون التزام</p>
+            </div>
+          </div>
+
+          <!-- Card 2: What do you need -->
+          <div class="carousel-card">
+            <span class="card-num">2</span>
+            <div class="card-title">وش تحتاج تعرف؟</div>
+            <div class="card-body">
+              <div class="sub-cards">
+                <div class="sub-card">
+                  <div class="sub-card-title">أبي أبيع</div>
+                  <div class="sub-card-desc">اعرف سعر عقارك في السوق الحالي قبل ما تطرحه.</div>
+                </div>
+                <div class="sub-card">
+                  <div class="sub-card-title">أبي أشتري</div>
+                  <div class="sub-card-desc">تأكد إن السعر اللي تدفعه عادل ومنصف.</div>
+                </div>
+                <div class="sub-card">
+                  <div class="sub-card-title">عقاري متعثر</div>
+                  <div class="sub-card-desc">حلول عملية لعقارك اللي تأخر بيعه.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Stuck property (NO bank mention) -->
+          <div class="carousel-card stuck">
+            <span class="card-num">3</span>
+            <div class="card-title">عقارك متعثر؟</div>
+            <div class="card-body">
+              <p>مو كل عقار ما ينباع لضعف السوق — أحيانًا يكون السبب السعر أو طريقة العرض. أرسل تفاصيل عقارك ونساعدك تعرف وضعه، مجانًا بالكامل.</p>
+              <button class="card-cta" style="background:#fff;color:#2f8f5f;margin-top:10px;" data-scroll-form>اطلب تحليل مجاني</button>
+            </div>
+          </div>
+
+          <!-- Card 4: Before you buy/sell -->
+          <div class="carousel-card">
+            <span class="card-num">4</span>
+            <div class="card-title">قبل ما تبيع أو تشتري… اعرف سعره في السوق</div>
+            <div class="card-body">
+              <ul>
+                <li>تعرف السعر العادل قبل ما تدخل مفاوضات</li>
+                <li>تتجنب البيع أو الشراء بسعر أقل أو أعلى من السوق</li>
+                <li>تاخذ قرارك بثقة بناءً على بيانات حقيقية</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 5: How it works -->
+          <div class="carousel-card">
+            <span class="card-num">5</span>
+            <div class="card-title">كيف تعمل الخدمة (بكل بساطة)</div>
+            <div class="card-body">
+              <ul>
+                <li>اختر حيّك على الخريطة أو أدخل بيانات عقارك</li>
+                <li>نحلل لك سعر السوق بناءً على بيانات الصفقات</li>
+                <li>تستلم التحليل على واتساب خلال دقائق</li>
+              </ul>
+              <p style="margin-top:8px;font-weight:700;color:var(--gold);">وكل هذا مجانًا.</p>
+            </div>
+          </div>
+
+          <!-- Card 6: Trust -->
+          <div class="carousel-card">
+            <span class="card-num">6</span>
+            <div class="card-title">ليش OwnRiyadh؟</div>
+            <div class="card-body">
+              <ul>
+                <li>تحليل مبني على بيانات السوق الفعلية في الرياض</li>
+                <li>مجاني بالكامل — بدون رسوم خفية أو التزام</li>
+                <li>فريق متخصص يفهم السوق العقاري السعودي</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 7: Articles -->
+          <div class="carousel-card">
+            <span class="card-num">7</span>
+            <div class="card-title">نعلمك العقار</div>
+            <div class="card-body">
+              <div class="articles-list">
+                <div class="article-item"><span class="article-title">كيف تحلل سعر الأرض قبل الشراء؟</span><span class="soon-badge">قريبًا</span></div>
+                <div class="article-item"><span class="article-title">أخطاء شائعة عند بيع العقار</span><span class="soon-badge">قريبًا</span></div>
+                <div class="article-item"><span class="article-title">دليلك لأحياء الرياض</span><span class="soon-badge">قريبًا</span></div>
+                <div class="article-item"><span class="article-title">حل عملي لعقارك المتعثر</span><span class="soon-badge">قريبًا</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 8: Final CTA -->
+          <div class="carousel-card final">
+            <span class="card-num">8</span>
+            <div class="card-title">جاهز تعرف كم يسوى عقارك؟</div>
+            <div class="card-body">
+              <p style="margin-bottom:10px;">ابدأ الآن — التحليل مجاني ويوصلك على واتساب.</p>
+              <button class="card-cta" data-scroll-form>حلّل سعر عقارك مجانًا</button>
+              <p style="margin-top:10px;font-size:10.5px;opacity:0.85;">مجاني بالكامل • بدون رسوم • بدون التزام</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="carousel-controls">
+        <button class="carousel-arrow" id="carPrev" aria-label="السابق">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="carousel-dots" id="carDots"></div>
+        <button class="carousel-arrow" id="carNext" aria-label="التالي">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ============ BOTTOM SHEETS (Mobile) ============ -->
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+
+<!-- Form Sheet -->
+<div class="bottom-sheet" id="formSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-head">
+    <div class="sheet-title">حلّل سعر عقارك</div>
+    <button class="close-btn" data-close-sheet aria-label="إغلاق">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body" id="formSheetBody"></div>
+</div>
+
+<!-- Detail Sheet -->
+<div class="bottom-sheet detail-sheet" id="detailSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-head">
+    <div class="sheet-title" id="mpName_m">—</div>
+    <button class="close-btn" data-close-sheet aria-label="إغلاق">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body">
+    <div class="detail-tags" id="mpTags_m" style="margin-bottom:12px;"></div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">سعر المتر</div>
+        <div class="stat-value" id="mpLand_m">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">متوسط الفيلا</div>
+        <div class="stat-value" id="mpVilla_m">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">آخر ٩٠ يوم</div>
+        <div class="stat-value" id="mpDeals_m">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">اتجاه السعر</div>
+        <div class="stat-value v" id="mpTrend_m">—</div>
+      </div>
+    </div>
+    <button class="detail-cta" id="mpCta_m">حلّل عقارك في هذا الحي</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   MAP CODE — real Riyadh district boundaries (163 districts,
+   all four directions)
+   ============================================================ */
+(function(){
+  var MAP={"w":1000.0,"h":1435.6,"districts":[{"name":"السليمانية - العليا","north":false,"south":true,"east":false,"west":true,"path":"M473.5,731.0L482.2,733.0L485.7,735.9L487.5,756.9L478.0,759.4L469.6,766.8L447.4,776.0L446.1,771.4L453.5,750.7L441.5,757.2L434.1,741.2L431.6,730.5L426.3,733.0L417.1,713.8L435.9,704.7L439.1,711.3L445.9,719.2L458.5,725.7Z","cx":454.2,"cy":740.4,"land":4650,"villa":3950000,"deals":103,"trend":5.5},{"name":"الملك عبدالعزيز","north":true,"south":false,"east":false,"west":true,"path":"M506.9,655.7L502.1,676.5L503.9,681.8L505.5,678.8L509.4,676.4L511.3,678.6L507.5,698.6L513.9,696.1L521.6,716.9L523.5,716.6L524.9,720.5L526.9,721.3L526.8,730.9L521.4,730.8L515.6,735.2L518.2,738.7L508.2,746.1L509.6,748.3L504.2,752.3L487.5,756.9L487.0,742.8L485.1,735.1L482.2,733.0L478.8,732.9L458.5,725.7L445.9,719.2L438.0,709.4L436.3,705.7L438.9,704.6L435.9,698.8L437.1,696.9L448.4,701.8L454.4,698.2L456.7,698.1L459.9,689.0L467.6,674.9L488.3,689.9L492.8,659.4L503.3,658.8Z","cx":487.2,"cy":710.2,"land":5000,"villa":4270000,"deals":105,"trend":5.7},{"name":"العليا - الملز والبطحاء","north":false,"south":true,"east":false,"west":true,"path":"M441.4,804.2L435.5,798.8L428.7,784.7L447.4,776.0L453.8,791.0Z","cx":441.9,"cy":789.7,"land":4580,"villa":3980000,"deals":109,"trend":6.2},{"name":"السليمانية - الملز والبطحاء","north":false,"south":true,"east":false,"west":true,"path":"M463.1,777.7L453.8,791.0L447.4,776.0L469.6,766.8L475.7,761.0Z","cx":457.9,"cy":777.2,"land":4660,"villa":4070000,"deals":111,"trend":6.4},{"name":"الوزارات","north":false,"south":true,"east":false,"west":true,"path":"M479.1,806.9L470.2,806.9L461.6,811.1L453.8,791.0L471.4,766.4L478.7,759.1Z","cx":469.3,"cy":788.6,"land":4660,"villa":4090000,"deals":112,"trend":6.6},{"name":"الضباط","north":false,"south":true,"east":false,"west":true,"path":"M495.3,807.2L479.1,806.9L478.7,759.1L487.5,756.9L496.4,800.5L495.4,801.8Z","cx":486.1,"cy":785.3,"land":4700,"villa":4150000,"deals":114,"trend":6.8},{"name":"الزهراء","north":false,"south":true,"east":false,"west":true,"path":"M493.6,784.5L487.5,756.9L501.8,753.6L505.0,769.8L512.9,773.3L517.8,779.1Z","cx":499.6,"cy":770.4,"land":4770,"villa":4230000,"deals":115,"trend":7.0},{"name":"الربوة","north":false,"south":true,"east":true,"west":false,"path":"M577.5,766.7L580.4,783.3L562.5,789.8L551.9,795.3L541.3,766.6L526.6,772.2L517.8,779.1L512.9,773.3L505.0,769.8L501.8,753.6L553.4,717.6L568.2,741.2Z","cx":544.9,"cy":757.3,"land":4770,"villa":4250000,"deals":117,"trend":7.2},{"name":"المربع","north":false,"south":true,"east":false,"west":true,"path":"M460.9,809.2L461.6,811.1L470.2,806.9L479.1,806.9L477.8,825.0L474.0,845.4L457.2,849.4L453.1,848.5L448.3,812.9L440.8,804.6L453.8,791.0Z","cx":461.8,"cy":822.8,"land":4610,"villa":4130000,"deals":118,"trend":7.3},{"name":"الملز","north":false,"south":true,"east":true,"west":false,"path":"M530.4,808.2L541.1,831.1L540.3,831.5L514.7,833.6L501.0,843.8L475.5,836.5L477.8,825.0L479.1,806.9L495.3,807.9L495.3,802.0L496.4,800.5L493.2,784.6L517.8,779.1L521.0,783.0Z","cx":506.8,"cy":814.4,"land":3450,"villa":1900000,"deals":8,"trend":-6.5},{"name":"جرير","north":false,"south":true,"east":true,"west":false,"path":"M530.5,808.0L521.0,783.0L517.8,779.1L526.6,772.2L541.3,766.6L551.9,795.3L535.1,802.1Z","cx":535.0,"cy":785.8,"land":3520,"villa":1950000,"deals":9,"trend":-6.3},{"name":"الصفا","north":false,"south":true,"east":true,"west":false,"path":"M541.9,830.7L541.1,831.1L531.0,810.0L530.4,808.2L531.7,806.0L535.7,801.9L580.4,783.3L583.9,794.3L592.5,807.1Z","cx":560.1,"cy":806.9,"land":4170,"villa":3190000,"deals":76,"trend":2.1},{"name":"الفوطة","north":false,"south":true,"east":false,"west":true,"path":"M474.2,846.3L478.2,855.9L478.4,861.5L471.9,860.7L454.5,862.0L453.1,848.5L457.2,849.4L474.0,845.4Z","cx":465.9,"cy":854.5,"land":4080,"villa":3140000,"deals":77,"trend":2.3},{"name":"العمل","north":false,"south":true,"east":false,"west":true,"path":"M479.2,857.8L474.0,845.4L475.5,836.5L500.2,843.4L505.4,848.8L494.4,851.2L479.5,856.6Z","cx":486.4,"cy":846.6,"land":4130,"villa":3200000,"deals":79,"trend":2.5},{"name":"ثليم","north":false,"south":true,"east":false,"west":true,"path":"M481.9,861.3L478.4,861.5L479.5,856.6L495.0,851.1L505.4,848.8L510.2,856.9L510.4,857.9Z","cx":495.3,"cy":855.8,"land":4120,"villa":3210000,"deals":80,"trend":2.6},{"name":"الصناعية","north":false,"south":true,"east":true,"west":false,"path":"M515.4,876.0L512.0,868.6L509.6,854.5L501.0,843.8L514.7,833.6L541.1,831.1L547.0,844.1L553.7,868.5L542.1,869.2L542.7,870.9Z","cx":528.3,"cy":853.0,"land":4130,"villa":3230000,"deals":82,"trend":2.8},{"name":"الفاروق","north":false,"south":true,"east":true,"west":false,"path":"M551.2,856.4L541.1,831.1L592.5,807.1L605.1,832.3Z","cx":572.9,"cy":831.7,"land":4160,"villa":3280000,"deals":83,"trend":3.0},{"name":"الديرة","north":false,"south":true,"east":false,"west":true,"path":"M458.6,889.4L457.8,890.1L454.5,862.0L471.9,860.7L478.4,861.5L475.9,870.8L477.6,876.4Z","cx":465.5,"cy":872.4,"land":4100,"villa":3250000,"deals":85,"trend":3.2},{"name":"ظهرة نمار","north":false,"south":true,"east":false,"west":true,"path":"M301.5,988.5L338.7,1006.6L346.8,1007.5L353.0,1006.0L359.2,1017.5L358.8,1029.5L357.4,1025.9L351.8,1028.8L347.6,1038.0L345.7,1039.0L345.1,1043.3L343.7,1042.2L344.0,1038.8L337.5,1042.5L335.5,1050.7L336.3,1055.6L334.1,1056.4L333.1,1061.8L332.2,1061.0L333.0,1056.8L331.3,1057.5L334.0,1055.2L334.1,1052.1L330.0,1052.5L332.7,1050.7L333.5,1048.0L332.3,1044.8L329.2,1045.7L327.8,1048.7L328.2,1046.9L326.7,1047.9L329.3,1043.5L322.5,1045.5L323.3,1039.4L317.5,1027.9L310.6,1028.0L306.3,1030.8L299.8,1031.8L295.5,1027.8L293.4,1028.0L293.8,1025.1L291.4,1024.7L291.3,1022.2L288.8,1021.6L290.4,1024.3L288.6,1025.7L291.2,1026.0L290.8,1028.0L293.4,1030.5L293.9,1033.0L290.0,1032.9L284.3,1027.3L282.7,1028.8L278.8,1028.4L277.9,1029.5L281.9,1032.2L284.0,1031.8L283.1,1032.9L285.3,1035.3L284.8,1036.2L277.3,1030.6L272.7,1029.0L268.3,1029.5L263.5,1027.5L257.2,1027.2L257.7,1026.1L244.3,1008.9L242.5,997.0L243.2,990.8L240.2,990.6L241.9,989.4L241.8,987.5L239.7,985.2L235.4,987.8L235.6,986.3L238.2,984.8L241.6,985.5L245.5,988.6L251.3,986.8L254.5,991.5L257.0,992.2L260.3,990.9L261.7,985.5L265.7,985.1L269.6,986.6L268.1,984.6L271.6,986.1L275.4,984.3L277.0,988.9L289.8,982.0Z","cx":299.0,"cy":1012.6,"land":3350,"villa":2500000,"deals":70,"trend":1.3},{"name":"المهدية","north":false,"south":true,"east":false,"west":true,"path":"M159.3,778.2L162.8,778.9L172.8,786.3L174.8,786.8L175.6,784.8L179.0,788.1L182.8,789.3L184.5,787.6L182.9,786.0L187.1,785.3L191.7,782.5L210.6,787.5L211.0,786.2L218.5,784.2L216.1,782.0L212.8,781.6L214.6,780.8L212.5,779.2L217.9,781.4L228.7,783.1L233.7,787.5L234.5,790.1L249.2,800.7L263.0,797.5L262.2,796.4L271.4,791.5L275.9,792.1L280.3,796.1L285.2,797.3L287.7,796.7L288.8,794.0L289.1,798.2L283.1,817.7L284.5,826.1L283.3,826.8L282.4,824.4L279.9,824.3L279.0,827.3L276.8,827.4L277.5,826.2L275.5,824.0L270.4,828.7L271.5,824.6L269.6,824.5L265.0,830.8L262.0,831.6L263.0,830.5L261.1,830.2L263.7,829.5L263.9,826.7L257.2,826.6L265.0,822.6L261.5,822.1L266.2,819.9L254.0,821.6L252.3,822.9L253.4,820.7L257.2,819.1L253.6,818.2L242.8,825.1L241.0,824.3L247.6,819.8L249.6,817.2L248.2,816.7L242.1,820.6L241.1,820.6L242.1,817.9L237.8,821.9L238.0,817.9L230.8,825.1L229.6,825.1L232.8,817.9L218.1,830.8L220.7,825.6L216.0,828.2L212.4,819.7L207.3,825.8L199.1,827.5L197.8,826.5L197.4,829.0L191.6,835.1L191.4,837.1L188.1,838.2L182.4,845.7L176.2,849.5L168.3,858.3L168.7,855.7L165.8,860.6L165.4,858.5L166.9,856.6L164.3,857.1L167.4,855.5L165.5,853.7L162.6,861.3L158.5,865.4L161.2,860.2L154.5,867.2L153.1,863.1L151.5,865.6L153.1,868.2L151.5,870.4L149.1,868.8L149.7,869.9L147.8,871.9L149.6,872.9L148.9,874.5L142.8,878.8L138.3,881.0L135.3,881.0L133.3,884.4L130.7,884.6L131.0,882.4L121.9,886.8L117.9,880.7L114.4,881.8L117.3,879.7L116.0,878.4L107.5,886.8L101.4,889.1L100.5,894.8L97.2,893.7L94.7,898.7L91.6,899.5L93.0,903.3L90.4,906.7L89.9,909.7L88.0,908.0L82.5,913.4L79.7,914.7L77.8,913.5L83.8,905.5L85.1,900.3L78.0,910.6L69.7,908.0L63.2,911.5L65.8,907.5L51.6,915.9L51.4,914.8L56.1,911.6L54.0,910.9L51.1,912.4L54.1,908.0L43.4,912.1L43.4,913.8L39.5,914.4L39.6,912.6L42.9,910.0L38.9,911.1L39.3,908.5L36.5,906.8L40.8,905.4L43.7,905.9L46.5,904.4L52.9,894.2L51.0,890.9L52.0,887.1L50.6,885.5L52.1,879.6L50.8,875.9L52.6,871.8L52.4,874.7L54.9,871.9L57.2,872.1L57.8,870.8L55.7,865.3L53.6,865.7L57.3,862.5L54.8,861.5L54.9,857.9L57.1,856.7L60.4,851.9L62.0,853.8L60.4,856.2L63.5,855.9L64.2,852.5L75.2,841.2L75.9,838.9L83.2,835.6L87.8,828.5L88.1,825.3L93.9,821.0L92.0,817.1L95.9,812.8L99.3,811.4L102.4,805.7L97.0,793.1L97.8,790.8L96.2,790.3L97.8,788.5L102.3,788.6L97.6,785.7L100.0,785.8L98.9,784.5L112.2,785.1L118.3,783.3L125.9,785.4L126.4,787.3L128.5,788.5L128.3,786.3L129.9,784.8L128.1,783.4L131.3,782.1L131.3,780.7L131.8,781.9L135.0,782.2L142.1,781.4L145.7,783.1L146.3,781.2L146.9,783.3L150.0,783.4L155.4,778.9Z","cx":146.6,"cy":833.8,"land":3100,"villa":2090000,"deals":47,"trend":-1.5},{"name":"بنبان","north":true,"south":false,"east":false,"west":true,"path":"M459.9,53.9L469.7,66.0L470.4,73.3L468.5,76.5L447.8,94.8L453.6,105.3L464.1,134.7L479.4,150.5L485.0,168.5L491.8,183.5L514.4,217.6L532.6,236.8L535.2,243.9L536.6,255.1L548.2,275.3L546.7,276.0L525.9,239.8L514.1,227.1L502.9,221.4L498.2,213.7L486.7,214.7L477.1,207.9L451.9,178.4L444.1,180.8L415.1,181.7L411.6,183.7L406.3,182.8L401.8,189.5L398.0,183.0L393.4,180.1L392.3,172.1L294.7,155.9L296.4,172.1L288.9,177.7L286.5,176.9L282.6,184.4L270.1,195.2L264.5,179.3L262.7,179.1L261.3,174.7L258.6,172.3L260.6,170.3L256.8,159.6L244.0,143.7L246.5,136.3L243.4,127.3L252.2,126.5L255.1,124.4L264.2,128.2L275.5,137.5L281.6,137.1L286.5,131.6L303.3,121.6L312.8,120.2L326.5,121.3L342.0,109.9L354.3,102.8L367.6,98.7L386.8,82.4L373.4,67.3L368.7,66.0L353.2,66.6L345.4,60.9L344.7,59.1L352.0,49.9L361.9,50.8L364.4,49.8L412.6,0.4L416.9,1.4Z","cx":395.4,"cy":120.9,"land":2480,"villa":1510000,"deals":27,"trend":-4.1},{"name":"المرقب","north":false,"south":true,"east":false,"west":true,"path":"M478.3,876.0L476.6,874.9L475.9,871.4L478.4,861.5L510.4,857.9Z","cx":488.5,"cy":865.6,"land":4150,"villa":3310000,"deals":86,"trend":3.4},{"name":"السلام","north":false,"south":true,"east":false,"west":true,"path":"M465.1,900.9L459.1,900.3L457.8,890.1L467.1,883.4Z","cx":462.6,"cy":893.2,"land":4070,"villa":3260000,"deals":88,"trend":3.6},{"name":"الضبيعة","north":false,"south":true,"east":false,"west":true,"path":"M472.4,897.2L465.1,900.9L467.1,883.4L468.3,882.7Z","cx":468.3,"cy":892.9,"land":4080,"villa":3290000,"deals":89,"trend":3.7},{"name":"ميكال","north":false,"south":true,"east":false,"west":true,"path":"M478.0,894.3L472.4,897.2L468.3,882.7L470.2,881.6Z","cx":472.7,"cy":890.3,"land":3630,"villa":2420000,"deals":44,"trend":-1.9},{"name":"الوسطى","north":false,"south":true,"east":false,"west":true,"path":"M473.3,882.2L480.0,894.1L478.0,894.3L470.7,883.6L470.2,881.6L471.8,880.4Z","cx":474.8,"cy":887.2,"land":3660,"villa":2450000,"deals":46,"trend":-1.7},{"name":"جبرة","north":false,"south":true,"east":false,"west":true,"path":"M483.1,884.5L486.2,887.4L488.7,893.5L486.1,893.7L483.9,889.2L478.4,890.9L473.3,882.2L477.5,879.9L475.7,877.5L477.6,876.4Z","cx":480.4,"cy":885.6,"land":3700,"villa":2510000,"deals":49,"trend":-1.3},{"name":"البطيحا","north":false,"south":true,"east":false,"west":true,"path":"M486.1,893.7L480.0,894.1L478.4,890.9L483.9,889.2Z","cx":482.3,"cy":892.0,"land":3690,"villa":2520000,"deals":50,"trend":-1.2},{"name":"العود","north":false,"south":true,"east":false,"west":true,"path":"M505.0,877.3L505.8,890.6L489.8,896.3L486.2,887.4L477.6,876.4L497.2,865.6Z","cx":493.7,"cy":881.1,"land":3740,"villa":2570000,"deals":52,"trend":-1.0},{"name":"الصالحية","north":false,"south":true,"east":true,"west":false,"path":"M505.6,877.9L497.2,865.6L510.4,858.4L511.8,867.6L514.8,876.1Z","cx":506.6,"cy":868.9,"land":3790,"villa":2630000,"deals":53,"trend":-0.8},{"name":"العتيقة","north":false,"south":true,"east":false,"west":true,"path":"M463.3,901.0L465.2,901.9L468.2,951.4L459.8,959.3L456.9,958.8L453.2,936.7L459.8,921.2L459.1,900.3Z","cx":461.5,"cy":933.6,"land":3610,"villa":2520000,"deals":54,"trend":-0.6},{"name":"منفوحة الجديدة","north":false,"south":true,"east":false,"west":true,"path":"M475.7,921.5L466.4,921.4L465.1,900.9L477.7,894.4L488.7,893.5L496.3,912.3Z","cx":479.2,"cy":907.7,"land":3710,"villa":2600000,"deals":56,"trend":-0.4},{"name":"غبيرة","north":false,"south":true,"east":true,"west":false,"path":"M496.7,912.1L489.8,896.3L505.8,890.6L505.6,877.9L514.8,876.1L519.9,887.5L529.0,891.5Z","cx":507.9,"cy":894.3,"land":3760,"villa":2660000,"deals":57,"trend":-0.2},{"name":"الخالدية","north":false,"south":true,"east":true,"west":false,"path":"M561.4,906.9L559.6,909.7L548.3,905.3L528.6,891.2L521.1,888.5L518.5,885.7L514.8,876.1L542.7,870.9L542.1,869.2L553.7,868.5L559.6,890.7Z","cx":542.2,"cy":886.6,"land":3310,"villa":1870000,"deals":12,"trend":-5.9},{"name":"الفيصلية","north":false,"south":true,"east":true,"west":false,"path":"M563.3,903.9L561.4,906.9L559.6,890.7L550.4,856.6L605.1,832.3L622.4,870.6L621.3,875.1L613.0,879.8L587.2,884.5L579.5,887.2L570.3,893.7Z","cx":585.7,"cy":865.4,"land":3330,"villa":1900000,"deals":14,"trend":-5.7},{"name":"اليمامة","north":false,"south":true,"east":false,"west":true,"path":"M482.9,921.6L485.9,929.7L487.5,947.6L490.6,955.3L471.6,961.2L466.9,961.5L459.8,959.3L468.2,951.4L466.4,921.4L474.2,921.9L481.3,919.2Z","cx":476.4,"cy":941.6,"land":3210,"villa":1850000,"deals":15,"trend":-5.5},{"name":"منفوحة","north":false,"south":true,"east":false,"west":true,"path":"M495.1,953.3L490.6,955.3L488.5,950.9L485.4,927.3L481.3,919.2L496.3,912.3L511.6,943.6Z","cx":495.4,"cy":934.3,"land":3240,"villa":1880000,"deals":17,"trend":-5.3},{"name":"المنصورة","north":false,"south":true,"east":true,"west":false,"path":"M513.4,942.5L511.6,943.6L509.1,940.0L496.3,912.3L529.0,891.5L546.2,904.2L559.6,909.7L547.3,921.8Z","cx":524.9,"cy":916.2,"land":3300,"villa":1930000,"deals":18,"trend":-5.1},{"name":"السفارات","north":false,"south":true,"east":false,"west":true,"path":"M327.8,755.7L343.3,781.3L344.5,787.5L342.7,793.5L337.1,799.0L313.3,807.2L294.3,819.2L292.4,816.4L295.8,809.2L295.7,802.3L298.3,798.1L300.5,797.3L298.8,796.4L299.1,793.5L311.7,792.6L309.5,791.2L296.7,790.2L298.1,785.6L297.2,784.5L297.9,775.2L300.0,773.7L301.5,774.3L301.5,772.9L299.5,772.0L303.8,769.6L306.6,772.6L307.2,770.9L310.7,771.3L311.1,773.6L312.0,772.0L313.7,774.5L311.5,769.7L306.3,767.4L307.0,765.0L309.2,763.4L312.6,764.2L314.5,762.1L316.1,762.9L314.2,765.0L316.8,763.3L318.4,764.2L317.2,760.2L320.4,761.0L324.1,755.4L321.7,755.3L317.2,758.1L316.6,757.2L313.8,758.0L311.1,760.3L307.5,759.8L324.4,750.1Z","cx":318.4,"cy":784.9,"land":4020,"villa":3220000,"deals":88,"trend":3.6},{"name":"أم الحمام الشرقي - الديرة","north":false,"south":true,"east":false,"west":true,"path":"M374.2,792.6L394.9,791.9L394.4,813.0L381.8,801.8L366.7,790.9Z","cx":386.2,"cy":798.7,"land":4220,"villa":3420000,"deals":91,"trend":3.9},{"name":"المؤتمرات","north":false,"south":true,"east":false,"west":true,"path":"M422.7,818.0L410.6,791.0L419.1,788.9L428.7,784.7L435.5,798.8L440.8,804.6Z","cx":425.1,"cy":800.6,"land":4340,"villa":3560000,"deals":94,"trend":4.3},{"name":"الشرفية","north":false,"south":true,"east":false,"west":true,"path":"M383.0,802.7L411.5,826.6L392.3,839.9L390.1,840.2L390.8,832.4L385.9,812.3L387.0,810.9L384.5,807.6L381.1,808.1L378.1,803.7L377.5,798.6Z","cx":394.8,"cy":822.6,"land":4240,"villa":3500000,"deals":95,"trend":4.5},{"name":"الرفيعة","north":false,"south":true,"east":false,"west":true,"path":"M396.5,837.9L408.5,879.2L408.1,885.3L399.4,885.0L391.4,875.9L367.1,867.0L351.9,855.7L355.7,839.2L390.3,840.2Z","cx":382.3,"cy":857.9,"land":4150,"villa":3440000,"deals":97,"trend":4.7},{"name":"الناصرية","north":false,"south":true,"east":false,"west":true,"path":"M433.6,843.0L434.8,844.0L429.1,843.1L426.9,845.3L416.7,846.7L400.8,852.3L396.5,837.9L422.3,818.3Z","cx":414.6,"cy":837.3,"land":4280,"villa":3570000,"deals":98,"trend":4.9},{"name":"النموذجية","north":false,"south":true,"east":false,"west":true,"path":"M444.0,845.1L443.1,845.9L435.5,844.4L433.0,842.4L422.3,818.3L440.8,804.6L448.3,812.9L451.9,838.4Z","cx":438.7,"cy":825.9,"land":4370,"villa":3660000,"deals":100,"trend":5.0},{"name":"الفاخرية","north":false,"south":true,"east":false,"west":true,"path":"M431.2,843.9L436.3,844.5L435.9,854.9L405.7,869.3L400.8,852.3L416.7,846.7L426.9,845.3L429.1,843.1Z","cx":418.3,"cy":854.9,"land":3780,"villa":2640000,"deals":55,"trend":-0.6},{"name":"الوشام","north":false,"south":true,"east":false,"west":true,"path":"M451.9,838.4L454.5,862.0L435.5,863.2L436.3,844.5L443.1,845.9Z","cx":445.0,"cy":853.2,"land":3840,"villa":2700000,"deals":56,"trend":-0.4},{"name":"العليشة","north":false,"south":true,"east":false,"west":true,"path":"M435.2,867.7L434.6,881.1L433.2,883.0L428.7,884.9L408.1,885.3L408.5,879.4L405.7,869.3L435.9,854.9Z","cx":422.5,"cy":872.7,"land":3770,"villa":2670000,"deals":58,"trend":-0.2},{"name":"أم سليم","north":false,"south":true,"east":false,"west":true,"path":"M435.9,876.6L434.8,876.8L435.5,863.2L454.5,862.0L455.8,874.4Z","cx":445.0,"cy":869.2,"land":3830,"villa":2730000,"deals":59,"trend":-0.0},{"name":"البديعة","north":false,"south":true,"east":false,"west":true,"path":"M433.7,887.9L435.7,900.4L430.5,902.5L425.1,906.9L421.7,912.2L424.0,915.5L414.7,922.0L403.3,919.3L398.8,912.6L400.1,911.6L399.1,905.2L399.7,903.8L402.5,903.7L400.3,902.2L404.8,893.9L405.9,885.3L428.7,884.9L433.2,883.0Z","cx":416.2,"cy":901.6,"land":3720,"villa":2660000,"deals":60,"trend":0.1},{"name":"الجرادية","north":false,"south":true,"east":false,"west":true,"path":"M441.3,913.6L439.1,911.4L436.4,905.0L433.2,883.0L434.5,881.3L446.9,897.9L459.1,900.3L459.5,906.3Z","cx":444.1,"cy":900.8,"land":3770,"villa":2720000,"deals":62,"trend":0.3},{"name":"الشميسي","north":false,"south":true,"east":false,"west":true,"path":"M459.0,899.0L459.1,900.3L446.6,897.7L434.8,882.1L434.8,876.8L455.8,874.4Z","cx":448.4,"cy":886.2,"land":3830,"villa":2780000,"deals":63,"trend":0.5},{"name":"السلطانة - الديرة","north":false,"south":true,"east":false,"west":true,"path":"M440.7,913.8L446.9,928.2L443.6,930.3L438.4,919.3L427.0,913.7L423.4,914.6L421.7,912.2L427.7,904.6L435.7,900.4L436.8,906.3Z","cx":434.8,"cy":913.4,"land":3750,"villa":2740000,"deals":65,"trend":0.7},{"name":"السعية","north":false,"south":true,"east":false,"west":true,"path":"M459.0,924.2L447.1,929.1L440.7,913.8L459.5,906.3Z","cx":451.9,"cy":917.7,"land":3770,"villa":2770000,"deals":66,"trend":0.9},{"name":"النخيل","north":true,"south":false,"east":false,"west":true,"path":"M371.9,660.9L334.8,678.2L315.1,661.8L280.9,700.2L267.2,687.3L260.8,676.4L270.9,670.4L357.7,630.0Z","cx":319.7,"cy":663.4,"land":4020,"villa":2950000,"deals":66,"trend":0.9},{"name":"جامعة الملك سعود","north":true,"south":false,"east":false,"west":true,"path":"M317.3,736.8L316.7,737.5L307.4,724.0L280.9,700.2L315.1,661.8L348.6,690.9L357.1,706.2L336.3,716.5Z","cx":318.7,"cy":698.7,"land":4060,"villa":3000000,"deals":68,"trend":1.1},{"name":"المحمدية","north":true,"south":false,"east":false,"west":true,"path":"M357.6,705.9L350.4,692.9L334.8,678.2L371.9,660.9L386.4,692.5Z","cx":362.9,"cy":683.4,"land":4200,"villa":3130000,"deals":69,"trend":1.3},{"name":"الرائد","north":false,"south":true,"east":false,"west":true,"path":"M365.7,728.1L366.9,737.6L327.8,755.7L316.7,737.5L336.3,716.5L357.1,706.2Z","cx":343.2,"cy":731.7,"land":3960,"villa":2960000,"deals":71,"trend":1.4},{"name":"الرحمانية","north":true,"south":false,"east":false,"west":true,"path":"M386.3,729.0L366.9,737.6L366.4,729.7L357.1,706.2L386.4,692.5L400.1,722.1Z","cx":378.2,"cy":714.7,"land":4290,"villa":3230000,"deals":72,"trend":1.6},{"name":"أم الحمام الغربي","north":false,"south":true,"east":false,"west":true,"path":"M373.8,791.6L374.2,792.6L366.7,790.9L336.5,769.6L327.8,755.7L369.3,736.5L371.6,741.1L362.5,748.6L361.8,751.1L364.5,768.0Z","cx":353.1,"cy":763.6,"land":4000,"villa":3030000,"deals":74,"trend":1.8},{"name":"أم الحمام الشرقي - المعذر","north":false,"south":true,"east":false,"west":true,"path":"M394.7,791.0L394.9,791.9L374.2,792.6L364.5,768.0L361.8,751.1L362.5,748.6L370.5,741.4L371.6,741.1L377.9,754.8L389.5,774.6L390.5,781.6Z","cx":376.2,"cy":770.3,"land":4080,"villa":3110000,"deals":75,"trend":2.0},{"name":"المعذر الشمالي","north":false,"south":true,"east":false,"west":true,"path":"M396.9,792.0L394.9,791.9L390.5,781.6L389.5,774.6L377.9,754.8L369.3,736.5L385.6,729.0L410.8,784.8L410.6,791.0Z","cx":391.0,"cy":761.4,"land":4140,"villa":3180000,"deals":77,"trend":2.2},{"name":"العليا - المعذر","north":false,"south":true,"east":false,"west":true,"path":"M411.3,790.9L410.2,782.9L385.8,729.4L400.1,722.1L428.7,784.7Z","cx":407.2,"cy":757.0,"land":4210,"villa":3250000,"deals":78,"trend":2.4},{"name":"القيروان","north":true,"south":false,"east":false,"west":true,"path":"M223.6,560.9L216.8,562.6L209.5,532.8L200.3,505.6L195.7,457.2L190.4,437.2L183.0,423.2L150.8,375.3L139.8,365.0L108.2,346.0L70.0,333.5L64.7,329.3L60.4,322.2L55.7,263.4L56.6,186.1L54.7,178.6L50.5,169.9L32.3,149.9L59.8,111.5L83.2,93.0L108.1,78.6L163.5,207.2L301.1,506.7L249.7,530.9L243.0,537.8L232.1,556.6L228.4,559.4Z","cx":155.6,"cy":311.4,"land":2820,"villa":1880000,"deals":45,"trend":-1.8},{"name":"حطين","north":true,"south":false,"east":false,"west":true,"path":"M303.9,592.7L327.0,644.0L270.9,670.4L260.8,676.4L253.9,664.3L246.7,643.5L230.3,604.4L253.1,595.5L255.7,596.5L263.9,594.0L265.1,597.9L298.9,582.0Z","cx":278.2,"cy":627.6,"land":3680,"villa":2490000,"deals":48,"trend":-1.4},{"name":"العقيق","north":true,"south":false,"east":false,"west":true,"path":"M327.6,643.7L299.1,582.4L329.4,568.3L357.7,630.0Z","cx":328.3,"cy":606.3,"land":3790,"villa":2580000,"deals":50,"trend":-1.2},{"name":"العارض","north":true,"south":false,"east":false,"west":true,"path":"M124.0,75.3L127.4,74.8L128.4,77.3L132.2,79.5L132.8,81.4L130.3,85.2L131.6,88.4L137.6,91.7L143.6,97.9L147.1,96.8L154.2,100.9L157.0,100.0L168.8,105.0L178.0,103.1L181.5,105.1L191.4,100.8L204.3,124.3L229.0,177.3L230.7,176.7L368.1,475.5L301.1,506.7L163.5,207.2L108.5,78.6L118.0,72.7Z","cx":243.1,"cy":294.5,"land":2750,"villa":1650000,"deals":24,"trend":-4.4},{"name":"النرجس","north":true,"south":false,"east":false,"west":true,"path":"M206.2,100.8L214.9,101.3L218.4,105.0L219.9,109.2L226.6,111.6L227.6,113.1L232.2,112.8L232.4,109.7L238.5,112.2L239.9,112.0L240.2,110.4L241.8,110.7L243.4,112.4L243.0,114.5L246.2,117.5L250.2,117.5L255.1,124.4L252.2,126.5L243.4,127.3L246.5,136.3L244.0,143.7L256.8,159.6L260.6,170.3L258.6,172.3L261.3,174.7L262.7,179.1L264.5,179.3L270.1,195.2L268.5,196.7L351.0,340.9L449.3,519.4L475.1,505.1L476.0,501.6L486.3,495.7L487.7,496.9L479.6,508.5L457.4,520.0L438.5,519.8L431.5,521.2L396.4,537.3L230.7,176.7L229.0,177.3L204.3,124.3L191.4,100.8Z","cx":328.9,"cy":340.6,"land":2980,"villa":1810000,"deals":25,"trend":-4.3},{"name":"قرطبة","north":true,"south":false,"east":true,"west":false,"path":"M524.9,495.2L547.1,542.3L486.0,570.6L473.0,542.1L471.2,534.7L472.1,526.6L479.6,508.5L487.7,496.9L487.1,499.2L520.5,480.4Z","cx":505.8,"cy":527.6,"land":4560,"villa":4080000,"deals":117,"trend":7.2},{"name":"المونسية","north":true,"south":false,"east":true,"west":false,"path":"M557.3,537.5L547.1,542.3L524.0,493.0L520.5,480.4L578.4,447.8L608.5,513.8Z","cx":563.6,"cy":496.1,"land":4440,"villa":3990000,"deals":119,"trend":7.4},{"name":"الرمال","north":true,"south":false,"east":true,"west":false,"path":"M695.1,398.8L705.6,459.9L705.9,473.3L704.4,482.2L696.2,486.1L643.7,498.7L608.5,513.8L578.4,447.8L626.9,420.5L627.1,422.5L692.5,383.5Z","cx":649.1,"cy":453.6,"land":3110,"villa":1720000,"deals":8,"trend":-6.4},{"name":"غرناطة","north":true,"south":false,"east":true,"west":false,"path":"M506.4,598.7L500.1,601.6L486.0,570.6L547.1,542.3L561.4,573.2Z","cx":523.6,"cy":571.9,"land":4440,"villa":3630000,"deals":93,"trend":4.2},{"name":"اليرموك","north":true,"south":false,"east":true,"west":false,"path":"M570.2,569.0L561.4,573.2L547.1,542.3L615.2,510.6L634.1,539.2Z","cx":589.5,"cy":541.5,"land":4290,"villa":3530000,"deals":94,"trend":4.4},{"name":"قري","north":false,"south":true,"east":false,"west":true,"path":"M473.3,882.2L471.8,880.4L475.7,877.5L477.5,879.9Z","cx":474.6,"cy":879.9,"land":3690,"villa":2490000,"deals":47,"trend":-1.5},{"name":"الهدا - المعذر","north":false,"south":true,"east":false,"west":true,"path":"M360.1,785.9L366.7,790.9L361.2,791.5L351.8,788.1L344.2,789.4L343.3,781.3L336.5,769.6Z","cx":350.2,"cy":783.0,"land":3550,"villa":2240000,"deals":33,"trend":-3.3},{"name":"الملقا","north":true,"south":false,"east":false,"west":true,"path":"M300.1,581.9L265.1,597.9L263.9,594.0L255.7,596.5L253.1,595.5L230.3,604.4L222.4,584.7L216.8,562.6L227.0,560.0L231.1,557.6L243.6,536.9L250.7,530.3L301.1,506.7L329.4,568.3Z","cx":272.8,"cy":558.4,"land":3560,"villa":2390000,"deals":47,"trend":-1.6},{"name":"الرمال","north":true,"south":false,"east":true,"west":false,"path":"M683.0,389.3L626.9,422.6L627.4,421.3L546.7,276.0L548.2,275.3L536.6,255.1L535.2,243.9L532.6,236.8L517.9,221.9L509.1,210.0L489.1,178.6L478.8,149.4L465.9,137.1L462.8,132.1L454.8,108.1L447.8,94.8L468.5,76.5L470.4,73.3L469.7,66.0L459.9,53.9L461.3,39.1L467.4,33.0L488.6,61.2L507.0,78.6L538.0,103.3L549.2,116.7L555.8,131.1L577.7,207.0L589.0,239.9L595.3,250.2L602.7,258.7L671.3,325.8L682.5,341.9L687.3,355.0L692.6,383.5Z","cx":567.6,"cy":239.4,"land":3550,"villa":3160000,"deals":116,"trend":7.1},{"name":"القادسية","north":true,"south":false,"east":true,"west":false,"path":"M694.1,530.6L683.7,536.6L683.2,535.6L649.7,562.8L615.2,510.6L645.8,498.0L696.2,486.1L704.4,482.2L697.2,517.0L698.3,526.3L693.3,529.3Z","cx":662.2,"cy":519.2,"land":4120,"villa":3410000,"deals":96,"trend":4.6},{"name":"الجنادرية","north":true,"south":false,"east":true,"west":false,"path":"M720.8,577.1L719.4,564.6L698.3,526.2L697.2,522.0L698.0,511.9L704.4,482.2L711.6,476.1L723.1,461.1L739.9,443.0L748.6,421.2L751.4,409.7L756.1,402.4L770.2,388.8L776.6,385.1L787.9,381.9L797.0,377.3L812.1,362.7L837.0,347.8L857.4,331.8L886.1,318.1L901.1,303.4L912.6,294.5L927.9,287.2L941.2,284.3L963.6,285.2L954.8,295.0L945.9,318.2L928.6,349.2L897.1,380.7L868.7,413.4L778.9,489.6Z","cx":814.1,"cy":416.7,"land":3550,"villa":2950000,"deals":97,"trend":4.8},{"name":"الحمراء","north":true,"south":false,"east":true,"west":false,"path":"M515.2,631.9L514.3,632.3L500.1,601.6L561.2,573.3L564.7,580.6L578.7,601.2L563.9,610.6Z","cx":538.8,"cy":602.8,"land":4590,"villa":3840000,"deals":99,"trend":4.9},{"name":"إشبيلية","north":true,"south":false,"east":true,"west":false,"path":"M578.9,601.1L564.7,580.6L561.2,573.3L634.1,539.2L649.7,562.8L603.5,594.1Z","cx":605.3,"cy":571.0,"land":4410,"villa":3710000,"deals":100,"trend":5.1},{"name":"القدس","north":true,"south":false,"east":true,"west":false,"path":"M538.5,664.6L531.3,669.5L514.3,632.3L549.0,617.4L567.5,644.8Z","cx":540.1,"cy":641.7,"land":4740,"villa":4010000,"deals":102,"trend":5.3},{"name":"الملك فيصل","north":true,"south":false,"east":true,"west":false,"path":"M576.4,655.6L575.3,656.3L549.0,617.4L565.9,609.6L578.7,601.2L602.1,638.0Z","cx":576.2,"cy":628.4,"land":4650,"villa":3950000,"deals":103,"trend":5.5},{"name":"الخليج","north":true,"south":false,"east":true,"west":false,"path":"M607.1,634.6L602.1,638.0L578.7,601.2L603.5,594.1L649.7,562.8L669.2,592.2Z","cx":624.7,"cy":600.3,"land":4490,"villa":3840000,"deals":105,"trend":5.7},{"name":"المعيزيلة","north":true,"south":false,"east":true,"west":false,"path":"M702.0,533.9L719.4,564.6L720.8,574.4L720.1,578.1L689.4,622.8L649.7,562.8L683.2,535.6L683.7,536.6L694.1,530.6L693.3,529.3L698.3,526.3Z","cx":688.5,"cy":571.9,"land":3800,"villa":2710000,"deals":60,"trend":0.0},{"name":"الروضة","north":true,"south":false,"east":true,"west":false,"path":"M559.4,713.5L553.4,717.6L531.3,669.5L567.5,644.8L596.7,688.0Z","cx":562.6,"cy":680.7,"land":4310,"villa":3100000,"deals":61,"trend":0.2},{"name":"الأندلس","north":true,"south":false,"east":true,"west":false,"path":"M600.2,685.6L596.7,688.0L575.3,656.3L602.1,638.0L623.4,669.7Z","cx":599.4,"cy":663.0,"land":4200,"villa":3040000,"deals":63,"trend":0.4},{"name":"النهضة","north":true,"south":false,"east":true,"west":false,"path":"M624.9,668.7L623.4,669.7L602.1,638.0L669.2,592.2L689.4,622.8L681.2,630.2Z","cx":646.1,"cy":631.0,"land":4050,"villa":2950000,"deals":64,"trend":0.6},{"name":"الريان","north":false,"south":true,"east":true,"west":false,"path":"M587.6,749.6L573.4,754.8L567.3,739.4L553.4,717.6L590.4,692.3L609.8,721.2L581.8,740.5Z","cx":581.3,"cy":721.8,"land":4200,"villa":3150000,"deals":72,"trend":1.5},{"name":"المنار","north":true,"south":false,"east":true,"west":false,"path":"M610.6,720.7L609.8,721.2L590.4,692.3L618.5,673.0L638.0,702.0Z","cx":614.2,"cy":697.1,"land":4310,"villa":3260000,"deals":73,"trend":1.7},{"name":"النسيم الغربي","north":true,"south":false,"east":true,"west":false,"path":"M666.5,743.8L618.5,673.0L653.5,649.2L701.2,720.0Z","cx":659.8,"cy":696.6,"land":4190,"villa":3180000,"deals":75,"trend":1.9},{"name":"النسيم الشرقي","north":true,"south":false,"east":true,"west":false,"path":"M709.0,714.7L701.2,720.0L653.5,649.2L682.0,629.6L689.4,622.8L717.8,664.5L732.3,677.3L738.0,694.8Z","cx":696.6,"cy":672.1,"land":4080,"villa":3120000,"deals":76,"trend":2.1},{"name":"السلي","north":false,"south":true,"east":true,"west":false,"path":"M717.5,826.7L718.0,829.5L725.0,829.7L788.4,828.6L785.9,833.1L784.3,846.6L786.9,850.4L787.2,856.4L792.0,865.9L792.9,879.7L794.9,884.6L799.0,913.0L804.3,925.6L813.7,941.5L792.0,940.9L788.6,942.8L780.6,943.0L744.0,951.7L736.8,958.2L714.4,953.3L700.4,946.8L700.9,945.7L685.1,928.6L660.1,910.8L678.7,901.5L629.5,805.3L715.7,760.9Z","cx":720.6,"cy":870.2,"land":3360,"villa":2230000,"deals":44,"trend":-2.0},{"name":"المناخ","north":false,"south":true,"east":true,"west":false,"path":"M694.4,939.3L700.9,945.7L699.2,949.1L654.8,939.0L656.7,944.3L633.8,956.4L614.9,942.7L579.7,922.7L567.5,913.3L559.6,909.7L568.0,896.3L576.6,888.8L586.3,884.7L614.5,879.2L620.4,876.3L622.2,871.2L634.7,896.2L639.6,900.1L651.7,905.1L679.5,924.0Z","cx":624.1,"cy":916.8,"land":3470,"villa":2320000,"deals":45,"trend":-1.8},{"name":"النور","north":false,"south":true,"east":true,"west":false,"path":"M678.7,901.5L660.1,910.8L646.9,902.4L639.6,900.1L633.6,894.7L623.7,875.2L613.8,851.5L645.0,835.4Z","cx":645.6,"cy":874.4,"land":3550,"villa":2390000,"deals":46,"trend":-1.6},{"name":"الدفاع","north":false,"south":true,"east":true,"west":false,"path":"M693.6,948.0L699.2,949.1L700.4,946.8L701.7,947.0L714.4,953.3L710.9,965.4L707.0,968.5L698.6,971.5L691.2,971.1L683.4,967.0L675.4,966.8L664.1,982.5L633.8,956.4L656.7,944.3L654.8,939.0Z","cx":674.0,"cy":958.7,"land":3320,"villa":2250000,"deals":48,"trend":-1.4},{"name":"الإسكان","north":false,"south":true,"east":true,"west":false,"path":"M735.7,963.8L704.1,1010.8L664.1,982.5L675.4,966.8L683.9,967.1L693.2,971.3L699.3,971.4L707.0,968.5L711.9,964.0L714.4,953.3L736.8,958.2Z","cx":701.6,"cy":980.6,"land":3240,"villa":2210000,"deals":49,"trend":-1.2},{"name":"الصناعية الجديدة","north":false,"south":true,"east":true,"west":false,"path":"M733.2,1027.0L731.3,1029.7L704.1,1010.8L735.7,963.8L736.8,959.3L744.0,964.6L754.6,978.3L762.5,985.0Z","cx":733.9,"cy":996.1,"land":3160,"villa":2170000,"deals":51,"trend":-1.1},{"name":"الصناعية الجديدة","north":false,"south":true,"east":true,"west":false,"path":"M850.4,1115.4L821.1,1092.9L731.3,1029.7L762.5,985.0L841.2,1040.5L848.2,1047.9L862.1,1067.1L868.7,1080.5L868.5,1090.8L864.3,1100.4Z","cx":804.2,"cy":1049.3,"land":3450,"villa":3090000,"deals":118,"trend":7.3},{"name":"هيت","north":false,"south":true,"east":true,"west":false,"path":"M882.0,944.1L883.8,948.8L882.0,957.5L891.7,969.8L900.5,967.4L902.3,969.6L908.6,970.7L912.7,973.5L915.5,970.6L925.6,971.8L932.5,977.1L934.7,974.9L931.5,972.6L919.9,969.5L924.2,967.4L923.9,964.8L932.8,967.0L936.4,965.1L940.0,970.8L943.6,969.4L943.5,966.5L946.1,966.0L948.4,962.9L942.6,962.3L944.9,959.5L941.6,956.9L946.6,951.6L950.4,952.5L951.3,958.7L953.2,959.6L957.2,958.4L963.0,960.0L966.1,962.9L970.3,961.2L973.0,963.3L974.8,968.5L971.1,976.7L973.0,986.4L972.5,1011.4L965.5,1020.2L955.3,1027.8L950.1,1036.0L943.2,1039.4L942.8,1045.9L938.8,1046.1L936.3,1049.5L936.9,1054.4L946.5,1062.5L946.3,1070.6L952.7,1076.7L952.4,1085.3L955.0,1093.7L956.0,1095.7L958.5,1093.8L959.1,1095.3L957.3,1101.4L957.9,1104.1L947.6,1116.3L944.9,1124.3L947.9,1125.8L951.4,1124.5L954.8,1125.5L953.7,1133.9L957.9,1132.0L960.4,1132.4L959.6,1133.9L953.8,1136.0L956.7,1139.9L959.8,1140.2L962.1,1138.3L965.9,1138.6L963.1,1144.5L964.7,1147.5L963.2,1149.9L963.6,1152.1L960.9,1153.9L960.4,1156.6L966.0,1164.7L970.5,1181.2L972.7,1182.6L977.8,1180.3L975.4,1184.1L979.1,1191.0L987.1,1198.7L1000.0,1205.4L997.9,1208.8L977.8,1225.1L968.3,1235.4L850.3,1115.6L864.3,1100.4L868.0,1092.3L869.0,1084.8L868.0,1077.7L865.3,1071.8L848.2,1047.9L834.1,1035.2L758.6,982.2L744.0,964.6L736.8,959.3L738.0,956.6L744.0,951.7L780.6,943.0L788.6,942.8L792.0,940.9Z","cx":890.0,"cy":1051.4,"land":3250,"villa":1790000,"deals":119,"trend":-6.5},{"name":"العزيزية","north":false,"south":true,"east":true,"west":false,"path":"M570.6,992.7L547.1,1005.4L521.5,957.9L511.6,943.6L547.3,921.8L559.6,909.7L567.5,913.3L579.7,922.7L614.9,942.7L634.0,956.6L626.4,963.4Z","cx":567.6,"cy":956.1,"land":3170,"villa":1850000,"deals":18,"trend":-5.2},{"name":"الدار البيضاء","north":false,"south":true,"east":true,"west":false,"path":"M585.9,1030.1L565.7,1040.6L547.1,1005.4L626.4,963.4L634.0,956.6L664.1,982.5L656.6,993.2Z","cx":604.2,"cy":998.0,"land":3050,"villa":1790000,"deals":19,"trend":-5.0},{"name":"المنصورية","north":false,"south":true,"east":true,"west":false,"path":"M629.2,1143.9L628.0,1147.7L626.2,1146.8L619.6,1153.8L589.2,1112.1L578.6,1104.8L575.3,1083.2L576.4,1072.2L573.7,1057.1L565.7,1040.6L611.8,1016.6L631.6,1055.5L676.5,1100.5L670.8,1109.5L666.8,1112.6L636.3,1123.2Z","cx":614.9,"cy":1083.8,"land":2840,"villa":1680000,"deals":21,"trend":-4.8},{"name":"طيبة","north":false,"south":true,"east":true,"west":false,"path":"M690.6,1082.5L676.5,1100.5L674.0,1098.5L631.6,1055.5L611.8,1016.6L656.6,993.2L664.1,982.5L729.9,1028.7Z","cx":670.1,"cy":1037.7,"land":2910,"villa":1740000,"deals":22,"trend":-4.6},{"name":"المصفاة","north":false,"south":true,"east":true,"west":false,"path":"M731.3,1029.7L784.9,1067.5L749.5,1120.9L692.1,1080.4L729.9,1028.7Z","cx":739.1,"cy":1074.8,"land":2750,"villa":1650000,"deals":24,"trend":-4.5},{"name":"الحائر","north":false,"south":true,"east":true,"west":false,"path":"M853.0,1118.2L968.3,1235.4L956.1,1247.0L952.5,1243.5L937.7,1265.8L928.2,1270.2L922.4,1292.1L922.1,1299.5L924.2,1305.1L923.8,1308.4L911.5,1341.4L908.5,1355.8L907.4,1371.9L908.7,1391.0L906.6,1401.4L907.9,1420.1L901.9,1435.6L883.1,1429.8L875.0,1416.9L867.5,1410.5L864.5,1410.8L861.4,1405.1L857.2,1400.9L835.7,1387.0L818.9,1380.0L804.9,1367.1L801.6,1360.2L796.9,1354.6L779.3,1343.4L766.3,1337.1L755.6,1333.8L740.0,1332.4L717.9,1336.3L681.0,1336.7L667.7,1339.3L662.0,1332.8L661.9,1331.5L666.4,1332.5L664.2,1323.0L666.5,1322.5L666.2,1320.0L675.0,1316.8L678.4,1313.2L680.6,1308.4L681.8,1294.2L675.9,1294.1L677.4,1292.6L679.8,1293.5L678.4,1290.5L676.1,1292.3L674.2,1292.1L671.3,1287.1L664.3,1282.6L664.0,1280.9L665.3,1278.1L668.3,1279.2L672.1,1277.4L673.5,1280.1L672.7,1278.1L676.8,1276.1L674.5,1275.6L675.6,1272.3L681.0,1268.0L676.7,1269.3L673.3,1276.0L669.4,1277.2L664.3,1276.4L662.6,1278.3L659.9,1275.3L660.7,1272.9L657.1,1273.5L661.1,1278.7L661.9,1282.3L656.1,1282.3L651.7,1281.0L642.0,1265.2L647.0,1259.4L656.4,1254.5L658.7,1257.3L658.2,1253.1L660.7,1253.9L661.6,1257.2L660.2,1258.4L663.4,1259.4L667.1,1255.4L669.9,1256.2L669.1,1253.9L662.6,1257.5L662.4,1254.6L664.0,1252.0L661.9,1252.8L660.1,1251.4L662.3,1248.5L662.2,1244.7L663.6,1243.9L661.8,1243.6L660.1,1241.2L662.4,1239.0L659.3,1240.3L654.2,1236.8L655.4,1233.6L658.9,1232.3L665.7,1234.1L669.6,1232.0L658.3,1230.7L655.5,1231.3L651.7,1235.8L650.1,1235.6L652.1,1232.8L652.6,1226.9L650.9,1228.1L650.2,1224.1L648.8,1225.5L645.1,1222.3L649.8,1228.3L649.0,1229.0L650.7,1232.6L648.7,1234.9L641.2,1233.7L636.2,1230.3L630.0,1221.7L631.5,1220.6L631.1,1219.6L629.5,1220.4L627.2,1216.9L626.2,1213.8L627.9,1212.6L623.4,1210.8L612.5,1198.9L614.2,1192.0L617.7,1186.9L615.2,1187.6L612.7,1184.5L614.7,1182.8L614.2,1181.9L611.2,1183.3L614.9,1189.1L610.6,1196.7L602.1,1182.8L603.2,1175.6L608.4,1166.7L611.6,1166.0L611.7,1163.1L615.5,1162.0L613.2,1159.4L619.4,1155.0L626.2,1146.8L628.0,1147.7L636.3,1123.2L666.8,1112.6L670.8,1109.5L692.1,1080.4L749.5,1120.9L784.9,1067.5L839.9,1106.7Z","cx":788.2,"cy":1234.0,"land":2330,"villa":1410000,"deals":25,"trend":-4.3},{"name":"الشفا","north":false,"south":true,"east":false,"west":true,"path":"M467.2,961.5L470.6,961.4L478.3,968.8L485.6,971.8L493.5,978.0L481.7,982.4L471.7,989.8L435.3,1037.6L404.7,1014.7L440.1,980.6L452.5,970.5L456.1,963.9L456.9,958.8Z","cx":446.8,"cy":997.0,"land":3930,"villa":3400000,"deals":108,"trend":6.1},{"name":"الرماية","north":true,"south":false,"east":true,"west":false,"path":"M782.1,578.7L802.3,606.9L799.6,607.3L797.7,625.5L772.9,625.8L772.3,649.3L735.1,649.0L715.9,661.7L689.4,622.8L724.1,572.1L752.3,591.5L771.3,562.9Z","cx":745.0,"cy":614.2,"land":3900,"villa":3000000,"deals":77,"trend":2.3},{"name":"النظيم","north":true,"south":false,"east":true,"west":false,"path":"M794.0,521.1L806.7,529.0L805.5,533.9L808.1,552.1L813.5,558.4L818.2,575.2L817.3,578.4L818.9,588.6L803.3,608.0L771.3,562.9L752.3,591.5L724.1,572.1L769.3,504.3Z","cx":777.0,"cy":556.1,"land":3750,"villa":2900000,"deals":79,"trend":2.5},{"name":"الروابي","north":false,"south":true,"east":true,"west":false,"path":"M581.6,782.8L580.4,783.3L577.5,766.7L573.4,754.8L587.9,749.5L581.8,740.5L609.8,721.2L635.1,758.4L606.5,773.9Z","cx":602.3,"cy":753.7,"land":4230,"villa":3310000,"deals":82,"trend":2.8},{"name":"السلام","north":false,"south":true,"east":true,"west":false,"path":"M635.4,758.2L609.8,721.2L638.0,702.0L666.1,744.0Z","cx":637.5,"cy":731.2,"land":4150,"villa":3270000,"deals":83,"trend":3.0},{"name":"الجزيرة","north":false,"south":true,"east":true,"west":false,"path":"M614.6,851.1L613.8,851.5L596.0,812.6L583.9,794.3L580.4,783.3L612.0,771.0L645.0,835.4Z","cx":612.7,"cy":810.5,"land":3660,"villa":2380000,"deals":39,"trend":-2.5},{"name":"الفيحاء","north":false,"south":true,"east":true,"west":false,"path":"M629.9,805.1L612.0,771.0L647.5,752.6L665.0,786.9Z","cx":638.4,"cy":778.8,"land":3660,"villa":2390000,"deals":41,"trend":-2.3},{"name":"السعادة","north":false,"south":true,"east":true,"west":false,"path":"M666.7,786.0L665.0,786.9L647.5,752.6L666.9,743.5L713.8,711.5L715.7,760.9Z","cx":686.2,"cy":752.2,"land":3570,"villa":2350000,"deals":42,"trend":-2.2},{"name":"عريض","north":false,"south":true,"east":false,"west":true,"path":"M600.3,1127.4L619.6,1153.8L613.2,1159.4L615.5,1162.0L611.7,1163.1L611.6,1166.0L608.4,1166.7L603.2,1175.6L603.0,1180.3L601.9,1181.1L609.9,1196.0L611.2,1196.2L612.4,1191.8L614.9,1189.4L611.2,1183.3L614.2,1181.9L614.7,1182.8L612.7,1184.5L615.2,1187.6L617.7,1186.9L614.2,1192.0L612.5,1198.9L623.4,1210.8L627.9,1212.6L626.2,1213.8L628.0,1218.6L629.0,1218.4L628.6,1219.6L631.1,1219.6L631.5,1220.6L630.0,1221.7L631.1,1223.6L636.2,1230.3L641.2,1233.7L648.1,1235.0L650.7,1232.6L649.0,1229.0L649.8,1228.3L645.1,1222.3L648.8,1225.5L650.2,1224.1L650.9,1228.1L652.6,1226.9L652.1,1232.8L650.1,1235.6L651.7,1235.8L655.5,1231.3L658.3,1230.7L669.6,1232.0L665.7,1234.1L658.9,1232.3L655.4,1233.6L654.2,1236.8L659.3,1240.3L662.4,1239.0L660.1,1241.2L661.8,1243.6L663.6,1243.9L662.2,1244.7L662.3,1248.5L660.1,1251.4L661.9,1252.8L664.0,1252.0L662.4,1254.6L662.6,1257.5L669.1,1253.9L669.9,1256.2L667.1,1255.4L663.4,1259.4L660.2,1258.4L661.6,1257.2L660.7,1253.9L658.2,1253.1L658.7,1257.3L656.4,1254.5L647.0,1259.4L642.7,1263.2L642.2,1267.0L651.7,1281.0L661.7,1282.5L661.1,1278.7L657.1,1273.5L660.7,1272.9L659.9,1275.3L662.6,1278.3L664.3,1276.4L669.4,1277.2L673.3,1276.0L676.7,1269.3L681.0,1268.0L675.6,1272.3L674.5,1275.6L676.8,1276.1L672.7,1278.1L673.5,1280.1L672.1,1277.4L668.3,1279.2L665.3,1278.1L664.0,1280.9L664.3,1282.6L671.3,1287.1L674.2,1292.1L676.1,1292.3L678.4,1290.5L679.8,1293.5L677.4,1292.6L675.9,1294.1L681.8,1294.2L680.6,1308.4L678.4,1313.2L675.0,1316.8L666.2,1320.0L666.5,1322.5L664.2,1323.0L666.4,1332.5L661.9,1331.5L664.0,1335.5L653.0,1330.3L642.3,1317.2L636.6,1313.3L624.4,1314.9L613.9,1318.1L607.6,1322.7L601.0,1324.8L590.3,1326.1L583.3,1328.4L563.2,1328.7L557.2,1326.0L552.4,1320.1L543.8,1305.9L537.6,1299.5L535.3,1293.3L521.1,1284.1L511.6,1282.8L481.8,1282.5L480.1,1279.5L468.1,1283.1L444.0,1284.2L432.7,1280.8L419.3,1256.6L413.1,1252.4L380.1,1247.6L377.3,1248.6L371.0,1255.9L368.0,1257.2L364.7,1255.8L356.0,1243.4L351.1,1244.0L338.0,1241.4L328.0,1247.9L320.9,1246.5L317.3,1244.9L313.3,1232.0L306.3,1222.6L295.4,1192.3L296.4,1181.0L302.3,1170.6L303.7,1171.8L311.9,1171.4L312.6,1172.4L315.5,1171.4L319.6,1173.4L327.9,1172.2L328.9,1167.3L332.7,1164.9L333.0,1160.3L337.3,1158.9L337.4,1151.0L340.3,1148.6L346.5,1152.3L352.4,1143.3L355.2,1142.8L358.1,1146.2L359.8,1146.4L364.3,1144.3L364.9,1141.0L368.3,1140.7L371.2,1137.8L376.3,1138.4L378.9,1134.7L375.4,1134.2L384.6,1131.6L386.4,1128.6L395.9,1127.8L397.6,1129.5L401.7,1126.1L400.4,1125.1L395.7,1126.1L395.9,1125.2L400.2,1123.8L401.9,1124.8L404.8,1123.5L418.3,1127.3L417.5,1121.4L420.3,1120.3L429.3,1121.4L433.2,1122.9L435.4,1125.7L441.1,1122.6L438.8,1121.2L451.4,1123.6L455.0,1118.3L457.8,1117.7L460.1,1118.8L460.7,1126.4L462.6,1127.9L471.1,1123.1L476.3,1125.7L477.4,1124.9L476.0,1119.9L474.8,1120.1L475.8,1119.1L472.6,1118.0L475.6,1118.3L475.3,1117.2L477.6,1115.8L482.7,1114.7L485.9,1115.8L488.5,1119.9L493.9,1123.4L500.0,1120.5L504.9,1120.5L504.5,1119.3L507.0,1120.7L508.8,1123.8L519.2,1125.9L525.7,1129.5L544.4,1128.7L551.3,1122.1L549.1,1120.7L560.6,1118.4L564.7,1120.4L572.5,1128.9L574.8,1129.8L587.9,1125.8L588.8,1119.8L591.6,1115.5Z","cx":496.6,"cy":1214.5,"land":3290,"villa":2940000,"deals":117,"trend":7.2},{"name":"هجرة وادي لبن","north":false,"south":true,"east":false,"west":true,"path":"M305.6,830.1L310.1,832.3L319.1,840.1L331.8,844.5L351.9,855.7L347.6,866.2L349.0,867.5L351.6,866.6L351.8,861.8L353.1,864.8L354.4,863.9L355.9,864.9L357.3,866.4L355.3,868.4L352.8,867.4L350.0,869.7L353.5,869.0L353.7,870.6L351.9,871.2L354.3,871.2L354.0,872.5L347.8,874.4L342.9,870.6L341.4,872.3L343.4,874.8L338.7,876.5L334.3,873.7L332.6,874.8L332.0,872.6L327.8,873.6L326.2,872.9L326.3,871.0L325.6,871.7L322.2,869.8L320.8,870.7L318.9,868.4L318.6,870.5L324.5,872.7L323.0,873.4L325.8,874.6L325.4,875.5L322.0,875.1L321.1,873.7L317.1,875.2L315.0,872.1L311.2,871.0L310.9,872.3L312.9,872.5L312.2,873.7L314.5,873.3L313.2,874.0L315.9,876.0L315.0,878.1L320.4,875.6L320.9,876.6L319.2,878.7L320.9,877.7L321.8,879.2L323.2,876.9L325.9,877.9L327.6,875.8L330.2,876.1L327.9,877.5L328.1,879.4L334.7,876.6L335.0,879.7L333.4,880.5L336.2,878.3L341.0,879.7L340.0,882.3L338.3,881.3L336.5,882.5L330.5,882.3L323.8,885.7L321.9,885.5L317.8,880.3L312.0,879.8L307.9,881.7L306.4,885.9L302.4,883.0L301.4,885.0L300.0,884.9L303.5,888.3L297.5,887.3L294.9,884.3L293.6,885.1L291.6,880.9L291.0,884.0L288.1,884.6L286.6,880.4L285.5,883.5L282.1,882.8L284.8,885.0L283.5,886.2L291.2,887.5L291.3,888.9L287.7,890.1L275.4,881.5L266.5,879.7L259.1,879.8L256.1,881.7L252.3,881.9L254.4,882.3L252.9,883.4L253.4,884.4L255.2,882.8L258.8,882.4L265.1,884.0L262.3,889.0L259.0,889.7L259.6,891.2L257.7,892.0L254.2,890.4L247.2,890.9L246.8,893.9L249.6,894.5L245.4,896.9L240.2,885.2L273.8,834.4L284.5,826.1L286.5,830.0L291.5,826.1Z","cx":296.7,"cy":861.0,"land":3840,"villa":3070000,"deals":87,"trend":3.5},{"name":"عريجاء الغربي","north":false,"south":true,"east":false,"west":true,"path":"M316.8,894.3L320.4,895.4L317.6,895.9L321.8,897.1L322.8,899.1L318.5,900.4L316.6,898.4L317.0,900.1L314.7,901.2L305.1,904.4L301.8,903.9L300.2,905.1L307.2,905.6L306.2,908.8L304.4,907.7L300.7,909.0L295.8,906.9L293.2,908.4L295.2,908.0L297.8,909.5L292.8,910.9L294.1,912.7L296.5,911.1L307.0,911.3L306.1,913.0L304.8,912.1L306.5,914.2L305.7,914.8L301.6,913.1L298.0,913.5L296.1,916.8L297.4,918.3L296.0,919.4L318.6,954.2L285.2,976.8L270.9,955.4L256.4,923.9L260.0,920.4L262.8,920.5L261.2,923.6L263.5,925.4L263.9,928.2L261.3,930.8L264.0,930.5L269.4,918.5L268.1,911.6L270.4,912.0L269.6,913.7L270.7,914.2L271.6,910.8L273.1,911.3L273.6,915.9L275.1,914.9L277.5,907.8L276.0,899.8L278.4,904.0L280.7,900.0L284.1,897.3L286.0,897.9L282.7,900.7L287.3,899.9L288.0,900.9L285.2,904.4L289.0,903.2L290.3,898.8L292.6,897.8L292.3,901.5L294.6,899.4L294.9,903.1L297.4,902.1L296.7,901.0L298.5,897.1L300.7,899.3L306.2,898.1L316.0,892.3Z","cx":288.3,"cy":935.7,"land":3680,"villa":2960000,"deals":88,"trend":3.6},{"name":"عريجاء الوسطى","north":false,"south":true,"east":false,"west":true,"path":"M381.9,896.5L383.0,898.3L385.4,898.3L384.8,895.4L386.6,897.8L388.7,897.9L388.8,895.4L389.4,897.3L392.5,899.2L393.2,902.6L396.0,903.1L396.2,905.2L393.2,905.3L392.3,907.0L385.8,908.9L352.0,931.8L349.2,927.7L315.8,950.1L297.9,923.3L299.5,922.3L300.0,915.8L302.3,916.8L301.8,919.8L304.7,917.5L306.5,918.2L306.3,920.0L308.1,918.9L307.2,917.5L309.8,914.9L310.8,905.4L311.7,908.8L313.9,910.2L311.8,913.3L311.4,917.4L317.4,909.8L322.6,906.3L315.6,914.7L313.4,921.3L317.3,918.0L320.3,912.5L323.3,910.2L324.1,910.8L325.9,905.2L328.2,908.4L328.1,904.1L330.6,903.9L334.5,897.2L333.6,900.9L335.7,898.1L337.3,898.9L337.8,897.7L339.4,897.8L338.9,901.7L336.2,904.0L338.4,903.2L341.5,899.4L340.5,894.4L342.1,896.3L344.1,893.7L346.7,894.0L346.8,899.9L364.7,899.7L366.2,903.0L369.6,903.2L371.6,903.1L372.5,901.6L368.5,899.2L372.2,899.0L376.6,903.6L379.1,902.3L380.3,899.7L376.6,901.2L375.8,899.8L380.7,898.0L377.9,898.3L379.0,897.2L376.5,897.6L376.7,896.6L380.0,896.6L380.9,893.9Z","cx":341.0,"cy":918.4,"land":3840,"villa":3100000,"deals":90,"trend":3.8},{"name":"السويدي","north":false,"south":true,"east":false,"west":true,"path":"M456.4,929.1L453.7,933.9L453.2,939.8L446.3,942.7L443.5,942.6L442.6,940.1L439.9,941.5L436.6,940.6L430.3,943.2L381.7,976.2L367.3,954.8L369.7,953.2L368.8,951.8L372.1,948.6L375.4,947.2L376.2,942.4L383.5,939.3L387.0,931.5L390.7,931.5L391.1,933.5L392.5,931.9L397.1,931.9L398.8,929.8L399.4,931.5L396.5,934.4L398.5,935.8L401.2,932.5L401.6,929.0L403.5,927.6L404.4,928.4L403.9,926.7L405.7,925.4L415.6,941.0L421.7,936.9L434.5,935.0L459.0,924.2Z","cx":403.0,"cy":947.8,"land":3940,"villa":3270000,"deals":97,"trend":4.7},{"name":"السلطانة - عريجاء","north":false,"south":true,"east":false,"west":true,"path":"M427.4,914.1L438.4,919.3L443.6,930.3L434.2,935.1L421.7,936.9L415.6,941.0L410.9,933.9L411.6,929.0L420.5,921.8L424.0,915.5L423.4,914.6Z","cx":426.8,"cy":927.6,"land":4040,"villa":3380000,"deals":99,"trend":4.9},{"name":"شبرا","north":false,"south":true,"east":false,"west":true,"path":"M359.8,1002.1L353.0,1006.0L348.2,998.6L423.3,947.8L433.2,942.7L434.9,945.6L422.9,959.6L426.5,965.1L417.6,973.5L399.6,985.5L388.3,990.5L368.3,995.9Z","cx":395.1,"cy":975.8,"land":3430,"villa":2380000,"deals":54,"trend":-0.7},{"name":"عريجاء","north":false,"south":true,"east":false,"west":true,"path":"M360.6,861.5L367.1,867.0L391.4,875.9L399.4,885.0L405.9,885.3L404.8,893.9L400.3,902.2L402.5,903.7L399.7,903.8L399.2,905.0L399.4,912.1L396.0,903.1L393.2,902.6L392.5,899.2L388.4,895.2L388.7,897.9L386.6,897.8L384.8,895.4L385.6,898.1L384.4,898.6L382.5,897.7L380.9,893.9L380.0,896.6L377.1,896.3L376.5,897.6L379.0,897.2L377.9,898.3L380.7,898.0L375.8,899.8L376.6,901.2L380.3,899.7L379.1,902.3L376.6,903.6L372.2,899.0L368.5,899.2L372.5,901.6L371.6,903.1L369.6,903.2L366.2,903.0L364.7,899.7L346.8,899.9L347.1,894.4L344.1,893.7L342.1,896.3L340.2,894.7L341.5,899.4L336.3,904.8L339.6,898.7L339.2,897.7L337.3,898.9L335.7,898.1L333.6,900.9L334.5,897.2L330.6,903.9L328.1,904.1L328.2,908.4L325.9,905.2L324.1,910.8L323.3,910.2L320.3,912.5L317.3,918.0L313.4,921.3L315.6,914.7L322.6,906.3L317.4,909.8L311.4,917.4L311.8,913.3L313.9,910.2L311.7,908.8L310.8,905.4L309.8,914.9L307.2,917.5L308.1,918.9L306.3,920.0L306.5,918.2L304.7,917.5L301.8,919.8L302.3,916.8L300.0,915.8L299.5,922.3L297.9,923.3L295.9,918.5L297.4,918.3L296.1,916.8L298.0,913.5L301.6,913.1L305.7,914.8L306.5,914.2L304.8,912.1L306.1,913.0L307.0,911.3L296.5,911.1L294.1,912.7L292.8,910.9L297.8,909.5L295.2,908.0L293.2,908.4L295.8,906.9L300.7,909.0L304.4,907.7L306.2,908.8L307.2,905.6L300.2,905.1L301.8,903.9L305.1,904.4L314.7,901.2L317.0,900.1L316.6,898.4L318.5,900.4L322.8,899.1L321.8,897.1L317.6,895.9L320.0,895.1L316.6,895.0L317.2,893.6L316.0,892.3L305.5,898.4L300.7,899.3L298.5,897.1L296.7,901.0L297.4,902.1L294.9,903.1L294.6,899.4L292.3,901.5L292.6,897.8L290.3,898.8L289.0,903.2L285.2,904.4L288.0,900.9L287.3,899.9L282.7,900.7L286.0,897.9L284.1,897.3L280.7,900.0L278.4,904.0L276.0,899.8L277.5,907.8L275.1,914.9L273.6,915.9L273.1,911.3L271.6,910.8L270.7,914.2L269.6,913.7L270.4,912.0L268.1,911.6L269.4,918.5L264.0,930.5L261.3,930.8L263.9,928.2L263.5,925.4L261.2,923.6L262.8,920.5L260.0,920.4L256.4,923.9L252.9,913.8L255.9,914.1L257.3,917.3L262.5,916.4L264.2,914.8L263.5,912.2L258.8,912.4L261.8,911.3L264.7,908.0L262.1,906.4L257.5,907.7L261.8,905.2L263.5,906.3L266.7,905.1L263.7,903.2L264.5,902.8L269.4,903.7L270.5,902.5L267.1,901.0L269.8,899.8L267.9,897.7L264.5,901.1L257.3,903.3L252.1,910.6L252.2,907.6L250.7,908.4L245.4,896.9L249.6,894.5L246.8,893.9L247.2,890.9L254.2,890.4L257.8,892.0L259.6,891.2L259.0,889.7L262.3,889.0L265.1,884.0L258.8,882.4L255.2,882.8L253.4,884.4L252.9,883.4L254.4,882.3L252.3,881.9L256.1,881.7L259.3,879.8L274.0,881.1L287.3,890.1L291.3,888.9L291.2,887.5L283.5,886.2L284.8,885.0L282.1,882.8L285.5,883.5L286.6,880.4L288.1,884.6L291.0,884.0L291.6,880.9L293.6,885.1L294.9,884.3L297.5,887.3L303.3,888.3L300.0,884.9L301.4,885.0L302.4,883.0L306.4,885.9L307.9,881.7L312.0,879.8L317.8,880.3L321.9,885.5L324.2,885.7L330.5,882.3L336.5,882.5L338.3,881.3L340.0,882.3L341.0,879.7L336.2,878.3L333.4,880.5L335.0,879.7L334.7,876.6L328.1,879.4L327.9,877.5L330.2,876.1L328.2,875.7L326.1,877.9L322.1,877.3L322.0,879.1L320.9,877.7L319.2,878.7L320.9,876.6L320.4,875.6L315.0,878.1L315.9,876.0L313.2,874.0L314.5,873.3L312.2,873.7L312.9,872.5L310.9,872.3L311.2,871.0L315.0,872.1L317.1,875.2L321.1,873.7L325.3,875.8L325.8,874.6L323.0,873.4L324.5,872.7L318.6,870.5L319.9,868.4L320.8,870.7L322.2,869.8L325.6,871.7L326.3,871.0L326.2,872.9L327.8,873.6L331.8,872.6L332.6,874.8L334.3,873.7L338.7,876.5L341.6,876.1L343.5,874.6L341.4,872.3L342.9,870.6L345.3,873.4L348.5,874.2L354.1,872.4L354.3,871.2L351.9,871.2L353.7,870.6L353.5,869.0L350.0,869.7L350.9,868.1L355.3,868.4L357.3,866.4L354.5,863.9L353.1,864.8L351.8,861.8L351.8,866.5L347.6,866.7L351.9,855.7Z","cx":328.7,"cy":891.3,"land":3900,"villa":3170000,"deals":91,"trend":4.0},{"name":"ظهرة البديعة","north":false,"south":true,"east":false,"west":true,"path":"M396.3,905.5L400.6,916.0L404.4,920.1L415.5,921.9L424.0,915.5L420.5,921.8L411.9,928.5L410.5,934.3L409.2,929.6L407.1,928.6L405.7,925.4L403.9,926.7L404.4,928.4L403.5,927.6L401.6,929.0L401.2,932.5L398.5,935.8L396.5,934.4L399.4,931.5L398.8,929.8L397.1,931.9L392.5,931.9L391.1,933.5L390.7,931.5L387.0,931.5L383.5,939.3L376.2,942.4L375.4,947.2L368.8,951.8L369.7,953.2L368.2,954.4L367.3,954.8L362.1,947.1L328.8,969.6L315.8,950.1L349.2,927.7L352.0,931.8L385.8,908.9L392.3,907.0L393.2,905.3Z","cx":364.0,"cy":936.5,"land":3870,"villa":3160000,"deals":93,"trend":4.2},{"name":"السويدي الغربي","north":false,"south":true,"east":false,"west":true,"path":"M346.8,1007.5L340.2,1007.0L331.5,1003.9L292.4,983.8L285.2,976.8L318.6,954.2L353.0,1006.0Z","cx":319.3,"cy":982.4,"land":3680,"villa":3020000,"deals":94,"trend":4.4},{"name":"الزهرة","north":false,"south":true,"east":false,"west":true,"path":"M348.5,998.4L328.8,969.6L362.1,947.1L381.7,976.2Z","cx":355.2,"cy":972.9,"land":3780,"villa":3120000,"deals":96,"trend":4.6},{"name":"الدرهمية","north":false,"south":true,"east":false,"west":true,"path":"M453.5,941.1L456.9,958.8L436.7,959.9L426.5,965.1L422.9,959.6L434.9,945.6L433.2,942.7L436.6,940.6L439.9,941.5L442.6,940.1L443.5,942.6L453.2,939.8Z","cx":441.3,"cy":952.0,"land":3550,"villa":2480000,"deals":55,"trend":-0.5},{"name":"طويق - العتيقة","north":false,"south":true,"east":false,"west":true,"path":"M235.2,912.6L230.8,918.1L226.0,932.4L227.5,933.8L228.5,933.3L231.4,927.0L270.9,985.7L268.5,984.6L269.6,986.6L265.7,985.1L261.1,985.7L261.8,987.7L260.3,990.9L256.5,992.2L254.5,991.5L251.3,986.8L245.5,988.6L239.6,984.6L235.6,986.3L235.9,988.2L239.7,985.2L241.5,986.7L241.9,989.4L240.2,990.9L243.2,990.8L243.0,1003.3L245.1,1010.9L254.9,1023.3L255.1,1028.5L259.6,1030.9L257.6,1033.0L260.6,1032.8L257.5,1033.7L256.7,1037.7L253.1,1030.7L249.0,1030.2L246.5,1027.8L242.6,1028.1L244.4,1024.2L240.6,1022.4L241.1,1019.7L240.2,1019.3L238.7,1021.7L240.5,1024.5L239.1,1025.2L240.6,1025.7L239.6,1026.7L243.2,1029.4L245.7,1028.9L250.6,1034.6L239.0,1036.0L245.3,1038.8L243.8,1040.4L240.9,1040.1L232.6,1045.4L230.4,1044.5L224.8,1038.0L222.6,1038.4L222.9,1039.5L218.7,1036.0L213.2,1035.1L208.8,1035.6L208.5,1037.5L206.2,1036.6L204.7,1034.0L201.8,1034.4L200.8,1032.0L195.5,1029.3L197.3,1033.5L194.6,1031.1L195.2,1032.5L193.4,1035.0L190.1,1035.6L189.2,1037.6L188.0,1035.7L182.2,1032.4L178.9,1026.8L175.6,1025.5L176.7,1032.2L174.2,1029.9L165.9,1027.7L165.0,1029.5L158.7,1031.4L160.6,1033.3L168.0,1034.3L149.4,1035.3L149.3,1038.1L153.9,1040.9L148.0,1042.2L149.4,1043.4L144.3,1043.2L136.5,1045.3L132.7,1042.5L125.0,1041.0L129.9,1046.2L133.9,1047.4L136.5,1050.5L128.4,1047.1L125.7,1047.6L125.2,1044.6L121.4,1048.8L120.5,1045.4L118.0,1046.6L119.0,1043.2L115.7,1044.6L116.6,1041.5L114.0,1042.3L115.1,1040.5L113.9,1040.5L113.3,1037.0L112.0,1037.4L111.9,1035.9L106.8,1034.2L103.8,1030.7L96.0,1028.6L94.7,1029.8L95.0,1032.3L99.3,1036.1L93.0,1035.6L91.7,1034.1L88.6,1035.4L87.2,1033.3L84.4,1033.2L86.0,1037.3L98.4,1042.1L98.2,1043.2L95.9,1043.8L87.9,1038.0L79.1,1036.7L79.9,1039.3L86.7,1039.9L86.9,1041.3L82.5,1040.9L78.6,1042.4L78.6,1043.9L82.4,1045.4L80.7,1046.9L76.0,1043.3L73.7,1045.3L75.9,1046.2L74.2,1046.8L75.9,1047.8L70.6,1048.5L75.5,1051.8L79.8,1051.5L78.8,1052.8L84.4,1051.5L84.6,1053.2L86.4,1053.0L85.0,1053.9L85.4,1055.3L97.8,1052.5L96.7,1054.2L93.4,1054.1L92.8,1057.0L89.0,1056.8L87.5,1058.8L85.7,1058.6L80.3,1054.1L72.1,1051.6L68.2,1046.5L64.4,1044.1L51.8,1043.3L48.1,1045.6L52.0,1045.2L55.7,1048.4L60.7,1049.0L58.6,1050.2L60.1,1051.1L58.8,1051.8L63.0,1052.5L56.4,1053.2L59.6,1055.1L49.7,1058.5L39.2,1056.6L33.4,1059.0L33.2,1060.5L38.8,1057.9L38.6,1059.2L40.4,1059.2L39.6,1061.1L41.9,1058.7L43.6,1058.6L44.7,1060.2L47.4,1059.7L47.0,1061.1L53.3,1061.4L45.7,1064.9L42.6,1064.6L45.4,1066.5L40.1,1070.1L32.5,1066.8L30.7,1064.6L23.5,1065.2L17.3,1072.1L12.6,1075.2L10.1,1072.1L7.1,1067.3L51.0,1039.2L129.2,1001.4L140.3,994.6L157.1,979.6L194.6,934.2L214.5,913.4L218.0,913.7L220.6,912.2L228.6,913.5L234.1,910.6L235.4,910.9Z","cx":179.1,"cy":997.6,"land":3100,"villa":2270000,"deals":66,"trend":0.8},{"name":"المصانع","north":false,"south":true,"east":true,"west":false,"path":"M546.5,1004.4L547.1,1005.4L543.4,1007.2L536.2,1008.9L525.9,1008.7L521.2,1006.7L516.1,1002.5L510.5,991.3L504.1,988.4L499.2,982.4L485.6,971.8L478.3,968.8L470.6,961.4L489.9,955.7L511.6,943.6L521.5,957.9Z","cx":512.8,"cy":976.8,"land":4020,"villa":3500000,"deals":110,"trend":6.3},{"name":"المروة","north":false,"south":true,"east":false,"west":true,"path":"M428.0,1047.9L408.6,1073.8L377.8,1050.2L404.7,1014.7L435.3,1037.6Z","cx":406.6,"cy":1044.1,"land":3770,"villa":3300000,"deals":111,"trend":6.5},{"name":"بدر","north":false,"south":true,"east":false,"west":true,"path":"M508.3,990.8L512.4,993.5L517.4,1003.9L525.9,1008.7L538.2,1008.7L547.1,1005.4L542.2,1013.1L545.1,1014.5L548.6,1012.5L549.0,1013.5L547.2,1014.3L548.7,1017.1L547.5,1017.4L548.1,1019.0L545.5,1019.7L547.4,1021.9L545.7,1022.2L546.2,1024.2L545.2,1024.7L553.5,1034.6L554.7,1030.1L556.6,1031.1L556.3,1033.9L558.3,1030.9L561.6,1037.3L557.9,1038.3L558.1,1039.5L558.6,1040.3L561.0,1038.8L564.1,1041.3L566.6,1047.4L565.4,1050.8L569.5,1052.0L571.4,1054.0L571.7,1059.9L569.8,1067.7L574.9,1066.4L576.4,1072.2L575.3,1083.2L578.1,1103.8L580.0,1106.4L588.5,1111.3L591.6,1115.5L588.8,1119.8L587.7,1125.9L573.9,1129.8L564.7,1120.4L560.4,1118.4L549.1,1120.7L551.3,1122.1L544.4,1128.7L525.7,1129.5L519.2,1125.9L508.8,1123.8L507.0,1120.7L504.5,1119.3L504.9,1120.5L500.0,1120.5L493.9,1123.4L488.5,1119.9L485.9,1115.8L482.7,1114.7L477.6,1115.8L475.3,1117.2L475.6,1118.3L472.6,1118.0L475.8,1119.1L474.8,1120.1L476.0,1119.9L477.4,1124.9L476.3,1125.7L471.1,1123.1L462.6,1127.9L460.7,1126.4L460.3,1119.2L458.4,1117.7L455.0,1118.3L451.4,1123.6L438.8,1121.2L441.1,1122.6L436.3,1125.6L428.5,1117.5L429.7,1103.9L427.4,1103.9L434.8,1094.0L422.1,1083.4L409.1,1075.7L408.6,1073.8L471.7,989.8L481.7,982.4L493.5,978.0L500.1,983.1L503.3,987.8Z","cx":499.7,"cy":1065.7,"land":3750,"villa":3300000,"deals":113,"trend":6.7},{"name":"عكاظ","north":false,"south":true,"east":false,"west":true,"path":"M434.8,1094.0L427.4,1103.9L429.7,1103.9L428.5,1117.5L436.3,1125.6L429.3,1121.4L420.3,1120.3L417.5,1121.4L418.3,1127.3L404.8,1123.5L401.9,1124.8L400.2,1123.8L395.9,1125.2L395.7,1126.1L400.4,1125.1L401.7,1126.1L397.6,1129.5L395.9,1127.8L386.4,1128.6L384.6,1131.6L375.4,1134.2L378.9,1134.7L376.3,1138.4L371.2,1137.8L367.8,1140.8L363.8,1138.7L371.4,1125.4L339.1,1106.2L343.6,1099.3L353.5,1089.5L363.8,1069.1L377.8,1050.2L408.6,1073.8L409.1,1075.7L422.1,1083.4Z","cx":387.8,"cy":1097.5,"land":3610,"villa":3190000,"deals":114,"trend":6.9},{"name":"أحد","north":false,"south":true,"east":false,"west":true,"path":"M366.5,1140.9L364.6,1141.2L364.3,1144.3L359.3,1146.5L355.2,1142.8L352.4,1143.3L346.5,1152.3L340.3,1148.6L338.1,1150.3L337.3,1158.9L333.0,1160.3L332.7,1164.9L328.9,1167.3L327.9,1172.2L319.6,1173.4L315.5,1171.4L304.3,1171.9L302.0,1170.4L339.1,1106.2L371.4,1125.4L363.8,1138.7Z","cx":337.0,"cy":1140.4,"land":3420,"villa":3040000,"deals":116,"trend":7.0},{"name":"ديراب","north":false,"south":true,"east":false,"west":true,"path":"M321.6,1047.7L320.5,1052.3L321.8,1053.1L323.0,1071.2L354.4,1088.2L341.7,1101.8L309.5,1157.1L296.6,1150.1L299.6,1143.5L263.3,1123.6L268.2,1121.1L265.7,1115.7L267.6,1114.6L269.0,1110.6L265.3,1105.9L272.0,1100.2L270.8,1092.9L277.1,1082.9L277.2,1074.9L284.4,1072.0L285.9,1075.0L283.3,1075.7L285.3,1076.6L284.5,1077.6L280.5,1078.6L283.0,1078.9L281.6,1081.0L287.7,1079.0L290.7,1075.1L296.3,1072.3L297.9,1064.0L304.5,1058.8L306.4,1055.3L314.5,1049.8L317.4,1046.2L321.7,1045.4Z","cx":306.1,"cy":1102.6,"land":3150,"villa":2380000,"deals":73,"trend":1.7},{"name":"الحزم","north":false,"south":true,"east":false,"west":true,"path":"M426.9,968.6L432.3,972.6L430.2,983.1L428.2,983.9L429.4,981.3L421.3,983.7L415.3,987.2L414.4,990.0L413.7,988.0L409.2,991.1L407.8,990.8L409.1,989.5L406.0,989.8L402.6,993.3L403.1,996.2L400.0,1002.1L406.2,1013.1L364.5,1068.1L354.4,1088.2L323.4,1071.6L321.8,1053.1L320.5,1052.3L322.5,1045.5L329.3,1043.5L326.7,1047.9L328.2,1046.9L327.8,1048.7L329.2,1045.7L332.3,1044.8L333.5,1048.0L332.7,1050.7L330.0,1052.5L334.1,1052.1L334.0,1055.2L331.3,1057.5L333.0,1056.8L332.2,1061.0L333.1,1061.8L334.1,1056.4L336.3,1055.6L335.5,1050.7L337.5,1042.5L344.0,1038.8L343.7,1042.2L345.1,1043.3L345.7,1039.0L347.6,1038.0L351.8,1028.8L357.4,1025.9L358.8,1029.5L359.2,1017.5L353.0,1006.0L368.3,995.9L388.3,990.5L399.6,985.5L421.4,970.0L423.5,971.7L424.4,970.7L423.3,969.1L425.4,970.0L426.4,969.1L425.8,967.0Z","cx":369.0,"cy":1031.6,"land":3440,"villa":2610000,"deals":74,"trend":1.9},{"name":"نمار","north":false,"south":true,"east":false,"west":true,"path":"M454.7,967.1L451.0,972.0L440.1,980.6L406.2,1013.1L400.0,1002.1L403.1,996.2L402.6,993.3L406.0,989.8L409.1,989.5L407.8,990.8L409.2,991.1L413.7,988.0L414.4,990.0L415.3,987.2L421.3,983.7L429.4,981.3L428.2,983.9L430.2,983.1L432.3,972.6L426.1,967.0L426.4,969.1L425.4,970.0L423.3,969.1L424.4,970.7L422.4,971.8L421.4,970.0L424.8,966.3L436.7,959.9L454.5,958.6L456.9,958.8Z","cx":427.9,"cy":982.3,"land":3650,"villa":2790000,"deals":76,"trend":2.1},{"name":"عرقة","north":false,"south":true,"east":false,"west":true,"path":"M234.5,693.6L235.4,694.0L230.6,699.3L228.1,705.2L226.5,714.6L223.4,720.5L224.5,723.4L230.0,724.9L237.6,731.8L242.6,733.6L253.5,731.4L261.1,726.4L274.1,727.5L278.6,729.6L277.0,722.3L284.6,740.2L303.1,755.5L304.4,759.0L303.6,762.0L307.5,759.8L311.1,760.3L313.8,758.0L316.6,757.2L317.2,758.1L321.7,755.3L324.1,755.4L320.4,761.0L317.2,760.2L318.4,764.2L316.8,763.3L314.2,765.0L316.1,762.9L314.5,762.1L312.6,764.2L309.2,763.4L307.0,765.0L306.3,767.4L311.5,769.7L313.7,774.5L312.0,772.0L311.1,773.6L310.7,771.3L307.2,770.9L306.6,772.6L303.8,769.6L299.5,772.0L301.5,772.9L301.5,774.3L300.0,773.7L297.9,775.2L297.2,784.5L298.1,785.6L296.7,790.2L309.5,791.2L311.7,792.6L299.1,793.5L298.8,796.4L300.5,797.3L298.3,798.1L295.7,802.3L295.8,809.2L292.4,816.4L294.3,819.2L284.7,826.0L283.1,822.4L283.1,817.7L289.1,798.2L288.8,794.0L287.7,796.7L285.2,797.3L280.3,796.1L275.9,792.1L271.4,791.5L262.2,796.4L263.0,797.5L249.2,800.7L234.5,790.1L230.4,783.9L212.5,779.2L214.6,780.8L212.8,781.6L216.1,782.0L218.5,784.2L211.0,786.2L210.6,787.5L191.7,782.5L187.1,785.3L182.9,786.0L184.5,787.6L182.8,789.3L179.0,788.1L175.6,784.8L174.8,786.8L172.8,786.3L160.5,778.2L155.4,778.9L150.0,783.4L146.9,783.3L146.3,781.2L145.7,783.1L142.1,781.4L135.0,782.2L131.8,781.9L131.3,780.7L131.3,782.1L128.1,783.4L129.9,784.8L128.3,786.3L128.5,788.5L126.4,787.3L125.9,785.4L118.3,783.3L112.2,785.1L98.9,784.5L100.0,785.8L97.6,786.1L102.3,788.6L97.8,788.5L96.2,790.3L97.8,790.8L97.0,793.1L93.0,790.4L90.9,790.4L87.9,792.7L81.9,791.4L80.5,788.0L75.4,782.4L79.8,778.4L81.5,773.1L84.2,772.7L84.8,774.2L90.0,771.7L101.7,763.5L103.4,760.6L105.2,760.0L106.7,761.3L107.1,760.1L109.3,759.6L109.2,760.8L110.2,759.5L116.3,758.2L113.7,760.0L115.4,760.0L114.9,760.7L110.5,761.6L114.3,764.1L118.0,764.0L119.5,760.8L123.2,759.1L125.8,753.0L128.7,752.9L136.6,740.3L139.1,742.1L141.0,737.6L145.2,736.5L148.4,729.6L147.9,733.4L149.4,732.3L148.4,735.4L150.6,734.0L151.4,730.0L152.0,734.0L149.8,736.0L146.0,736.5L146.3,739.8L142.8,740.0L135.3,748.4L138.3,747.5L139.7,744.6L143.3,741.7L145.4,741.9L141.9,744.5L140.4,748.3L141.7,748.9L145.5,743.5L144.4,745.8L144.9,746.7L145.6,745.9L145.3,748.9L148.9,738.5L150.1,738.9L148.8,741.3L150.2,741.2L149.8,743.4L151.2,745.6L151.3,741.3L152.2,739.5L152.9,740.4L155.5,734.5L157.5,724.9L159.2,724.9L159.1,733.2L156.4,734.7L159.9,736.0L158.6,737.3L159.6,737.2L159.1,738.5L156.6,739.8L161.2,737.9L160.7,735.4L163.0,726.4L169.0,721.1L171.4,711.9L175.2,710.3L174.4,712.3L172.0,713.1L171.7,713.9L173.1,713.3L172.2,715.6L177.2,710.8L173.2,718.6L168.6,721.9L167.0,727.1L164.7,728.7L166.0,731.6L164.2,734.9L166.1,735.7L164.0,738.9L161.2,740.0L162.5,740.2L162.2,741.6L159.5,742.5L162.0,742.5L159.3,744.0L160.1,745.4L156.2,748.3L152.7,749.0L154.6,749.1L153.2,751.0L154.5,750.3L154.7,751.8L160.6,746.2L162.9,741.1L165.0,740.3L163.4,749.3L165.4,746.0L166.2,739.2L167.1,739.9L166.1,738.3L168.1,732.0L167.1,729.4L170.6,729.7L169.5,732.5L170.7,733.3L171.6,729.4L169.6,727.0L172.6,721.8L176.0,726.6L175.8,721.7L180.7,714.3L181.1,716.5L182.1,715.5L183.7,707.8L185.9,704.5L194.5,699.1L195.8,699.0L194.1,702.0L189.0,704.9L190.8,704.8L190.3,706.1L191.9,704.4L191.6,706.5L192.8,704.2L195.4,702.3L196.2,703.3L197.4,701.2L207.4,700.9L221.1,695.5L233.6,692.5Z","cx":210.2,"cy":757.6,"land":3300,"villa":2200000,"deals":44,"trend":-1.9},{"name":"الخزامى","north":false,"south":true,"east":false,"west":true,"path":"M304.6,761.5L303.6,762.0L304.4,758.4L302.7,754.9L284.8,740.4L277.7,725.9L277.1,721.7L289.1,707.5L309.2,726.0L324.4,750.1Z","cx":299.2,"cy":734.8,"land":3570,"villa":2390000,"deals":46,"trend":-1.7},{"name":"ظهرة لبن","north":false,"south":true,"east":false,"west":true,"path":"M246.9,820.4L241.0,824.3L242.8,825.1L253.6,818.2L257.2,819.1L253.4,820.7L252.3,822.9L254.0,821.6L266.2,819.9L261.5,822.1L265.0,822.6L257.2,826.6L263.9,826.7L263.7,829.5L261.0,830.4L263.0,830.5L261.9,831.3L262.8,831.8L265.0,830.8L269.6,824.5L271.5,824.6L270.4,828.7L275.5,824.0L277.5,826.2L276.8,827.4L279.0,827.3L279.9,824.3L282.4,824.4L283.3,826.8L273.8,834.4L239.0,887.0L226.5,901.3L216.4,897.0L201.6,896.4L194.5,900.2L194.3,901.4L197.2,902.2L197.4,903.4L193.0,906.3L188.1,906.9L180.4,904.9L178.7,905.4L176.4,909.0L164.0,909.1L161.8,910.3L163.0,912.8L166.6,911.8L176.7,914.3L175.4,916.6L169.3,915.8L164.9,917.0L166.1,920.4L161.9,923.1L165.3,927.3L163.3,929.7L145.8,927.0L141.3,931.6L139.6,930.1L136.5,934.8L133.1,931.1L131.9,933.4L133.5,937.1L130.5,937.3L123.6,934.4L118.0,928.9L111.2,929.8L109.8,927.6L106.2,926.3L95.7,927.7L86.2,924.2L78.0,924.5L73.0,926.1L68.3,930.1L60.5,927.6L58.8,928.5L58.5,931.3L54.8,927.0L50.6,925.1L48.1,928.4L44.1,928.0L40.9,929.4L31.4,920.8L34.0,917.3L36.0,917.1L37.9,910.1L36.5,906.8L39.3,908.5L38.9,911.1L42.9,910.0L39.6,912.6L39.5,914.4L43.4,913.8L43.4,912.1L54.1,908.0L51.1,912.4L54.0,910.9L56.1,911.6L51.4,914.8L51.6,915.9L65.8,907.5L63.2,911.5L69.7,908.0L78.0,910.6L85.1,900.3L83.8,905.5L77.8,913.5L79.7,914.7L82.5,913.4L88.0,908.0L89.9,909.7L90.4,906.7L93.0,903.3L91.6,899.5L94.7,898.7L97.2,893.7L100.5,894.8L101.4,889.1L107.5,886.8L116.0,878.4L117.3,879.7L114.4,881.8L117.9,880.7L121.9,886.8L131.0,882.4L130.7,884.6L133.3,884.4L135.3,881.0L138.3,881.0L142.8,878.8L148.9,874.5L149.6,872.9L147.8,871.9L149.7,869.9L149.1,868.8L151.5,870.4L153.1,868.2L151.5,865.6L153.1,863.1L154.5,867.2L161.2,860.2L158.5,865.4L162.6,861.3L165.5,853.7L167.4,855.5L164.3,857.1L166.9,856.6L165.4,858.5L165.8,860.6L168.7,855.7L168.3,858.3L176.2,849.5L182.4,845.7L188.1,838.2L191.4,837.1L191.6,835.1L196.1,830.8L198.5,826.0L199.1,827.5L207.3,825.8L212.4,819.7L216.0,828.2L220.7,825.6L218.1,830.8L232.8,817.9L229.6,825.1L233.0,823.7L235.1,819.8L238.0,817.9L237.8,821.9L242.1,817.9L241.1,820.6L242.1,820.6L245.9,817.3L249.4,816.9Z","cx":174.2,"cy":880.7,"land":3140,"villa":2130000,"deals":49,"trend":-1.3},{"name":"طويق - عرقة","north":false,"south":true,"east":false,"west":true,"path":"M199.5,928.7L157.1,979.6L140.3,994.6L129.2,1001.4L51.0,1039.2L7.1,1067.3L0.0,1055.6L3.0,1051.9L8.3,1053.0L9.4,1051.8L2.9,1046.3L3.3,1040.5L3.9,1039.7L8.8,1041.6L10.0,1034.8L15.6,1037.6L14.8,1031.3L17.4,1030.7L17.7,1028.3L21.0,1027.8L22.5,1026.1L24.5,1027.0L25.9,1023.9L28.3,1024.4L31.4,1022.3L35.6,1013.8L35.0,1010.9L38.4,1009.9L41.0,1006.4L47.0,1008.9L51.1,1008.0L54.9,1009.1L57.5,1007.4L55.3,1013.2L58.8,1013.5L65.0,1007.0L67.5,1006.5L74.5,1000.3L76.1,1001.8L82.2,1000.0L83.1,1003.2L87.2,1003.0L76.4,1009.0L76.8,1011.6L82.9,1013.2L90.4,1012.6L90.1,1014.8L93.7,1015.6L99.1,1012.3L100.1,1006.0L107.6,994.6L108.9,988.5L113.4,985.3L114.0,980.9L117.6,975.5L117.5,984.9L118.9,986.3L123.6,982.4L126.1,982.0L129.7,978.0L132.8,977.9L133.4,970.5L135.1,970.6L132.4,967.3L134.9,968.9L140.1,966.9L144.8,963.3L146.1,961.0L145.0,959.1L153.0,956.7L154.9,955.1L155.2,952.8L168.0,948.6L174.0,944.9L178.3,940.6L183.1,931.7L191.3,930.2L194.7,926.1L201.9,922.6L208.3,916.7L210.6,911.5L214.5,913.4Z","cx":91.3,"cy":1004.1,"land":2760,"villa":1890000,"deals":50,"trend":-1.2},{"name":"الياسمين","north":true,"south":false,"east":false,"west":true,"path":"M387.7,518.4L396.4,537.3L365.8,552.1L351.4,520.7L315.2,537.5L301.1,506.7L368.1,475.5Z","cx":351.8,"cy":513.6,"land":3440,"villa":2120000,"deals":28,"trend":-3.9},{"name":"الصحافة","north":true,"south":false,"east":false,"west":true,"path":"M346.8,605.7L315.2,537.5L351.4,520.7L367.5,555.6Z","cx":343.6,"cy":556.8,"land":3530,"villa":2190000,"deals":30,"trend":-3.7},{"name":"الربيع","north":true,"south":false,"east":false,"west":true,"path":"M379.6,582.2L350.9,595.8L367.5,555.6L365.8,552.1L396.7,537.2L410.4,568.2Z","cx":381.8,"cy":565.0,"land":3630,"villa":2270000,"deals":31,"trend":-3.5},{"name":"الندى","north":true,"south":false,"east":false,"west":true,"path":"M441.4,554.3L410.7,568.8L396.7,537.2L427.1,523.1Z","cx":419.0,"cy":545.8,"land":3660,"villa":2300000,"deals":33,"trend":-3.3},{"name":"جامعة الإمام محمد بن سعود الإسلامية","north":true,"south":false,"east":false,"west":true,"path":"M472.0,539.1L472.3,540.1L441.4,554.3L427.1,523.1L437.6,519.9L457.4,520.0L479.6,508.5L471.8,527.5Z","cx":452.6,"cy":532.1,"land":3670,"villa":2320000,"deals":34,"trend":-3.2},{"name":"الغدير","north":true,"south":false,"east":false,"west":true,"path":"M361.0,628.6L357.7,630.0L346.7,606.0L350.9,595.8L379.6,582.2L393.9,613.3Z","cx":369.2,"cy":606.3,"land":3740,"villa":2390000,"deals":35,"trend":-3.0},{"name":"النفل","north":true,"south":false,"east":false,"west":true,"path":"M410.7,568.8L424.8,599.1L393.9,613.3L379.6,582.2Z","cx":402.2,"cy":590.7,"land":4500,"villa":3810000,"deals":102,"trend":5.4},{"name":"الوادي","north":true,"south":false,"east":false,"west":true,"path":"M455.4,584.9L424.8,599.1L410.7,568.8L441.4,554.3Z","cx":433.1,"cy":576.8,"land":4530,"villa":3860000,"deals":104,"trend":5.6},{"name":"الفلاح","north":true,"south":false,"east":false,"west":true,"path":"M486.0,570.6L455.4,584.9L441.4,554.3L472.3,540.1Z","cx":463.7,"cy":562.5,"land":4530,"villa":3880000,"deals":105,"trend":5.8},{"name":"الهدا - الديرة","north":false,"south":true,"east":false,"west":true,"path":"M361.2,791.5L366.7,790.9L377.5,798.6L378.1,803.7L380.5,807.5L384.5,807.6L387.0,810.9L385.9,812.3L390.8,832.4L390.1,840.2L355.7,839.2L351.9,855.7L331.8,844.5L319.1,840.1L310.1,832.3L304.9,829.8L291.5,826.1L286.5,830.0L285.7,829.4L284.5,826.1L308.7,809.7L338.8,797.9L342.3,794.3L344.2,789.4L353.1,788.2Z","cx":346.2,"cy":820.5,"land":4060,"villa":3270000,"deals":89,"trend":3.8},{"name":"المعذر","north":false,"south":true,"east":false,"west":true,"path":"M410.7,792.1L422.3,818.3L411.5,826.6L394.4,813.0L394.9,791.9L410.6,791.0Z","cx":406.8,"cy":808.0,"land":4270,"villa":3480000,"deals":92,"trend":4.1},{"name":"المروج","north":true,"south":false,"east":false,"west":true,"path":"M372.4,660.7L357.7,630.0L393.9,613.3L408.1,644.2Z","cx":382.9,"cy":637.1,"land":3630,"villa":2130000,"deals":19,"trend":-5.1},{"name":"المصيف","north":true,"south":false,"east":false,"west":true,"path":"M408.4,644.0L393.9,613.3L424.8,599.1L438.9,630.0Z","cx":416.4,"cy":621.6,"land":3690,"villa":2180000,"deals":20,"trend":-4.9},{"name":"التعاون","north":true,"south":false,"east":false,"west":true,"path":"M439.3,629.8L424.8,599.1L455.4,584.9L469.6,615.8Z","cx":447.2,"cy":607.4,"land":3720,"villa":2210000,"deals":22,"trend":-4.7},{"name":"الإزدهار","north":true,"south":false,"east":false,"west":true,"path":"M470.0,615.6L455.4,584.9L486.0,570.6L500.1,601.6Z","cx":477.8,"cy":593.2,"land":3720,"villa":2230000,"deals":23,"trend":-4.5},{"name":"الملك فهد","north":true,"south":false,"east":false,"west":true,"path":"M387.0,692.3L371.9,660.9L408.1,644.2L422.6,675.8Z","cx":397.2,"cy":668.4,"land":3770,"villa":2280000,"deals":25,"trend":-4.4},{"name":"المرسلات","north":true,"south":false,"east":false,"west":true,"path":"M423.0,675.6L408.1,644.2L438.9,630.0L453.3,661.6Z","cx":430.7,"cy":652.9,"land":3840,"villa":2340000,"deals":26,"trend":-4.2},{"name":"النزهة","north":true,"south":false,"east":false,"west":true,"path":"M453.6,661.4L438.9,630.0L469.6,615.8L484.1,647.2Z","cx":461.5,"cy":638.7,"land":3880,"villa":2380000,"deals":27,"trend":-4.0},{"name":"المغرزات","north":true,"south":false,"east":false,"west":true,"path":"M487.0,645.8L484.1,647.2L469.6,615.8L500.1,601.6L514.3,632.3Z","cx":491.9,"cy":624.2,"land":3880,"villa":2400000,"deals":29,"trend":-3.8},{"name":"الورود","north":true,"south":false,"east":false,"west":true,"path":"M400.8,721.7L386.4,692.5L422.6,675.8L435.9,704.7Z","cx":411.2,"cy":698.8,"land":3900,"villa":2430000,"deals":30,"trend":-3.6},{"name":"صلاح الدين","north":true,"south":false,"east":false,"west":true,"path":"M457.2,696.5L456.7,698.1L454.4,698.2L448.4,701.8L436.8,696.9L435.9,698.8L438.9,704.6L436.3,705.7L422.6,675.8L453.3,661.6L463.0,683.0Z","cx":444.1,"cy":682.9,"land":4750,"villa":3950000,"deals":97,"trend":4.8},{"name":"الواحة","north":true,"south":false,"east":false,"west":true,"path":"M490.6,674.4L488.3,689.9L467.6,674.9L463.0,683.0L453.3,661.6L484.1,647.2L492.1,664.7Z","cx":475.6,"cy":667.5,"land":4800,"villa":4010000,"deals":99,"trend":4.9},{"name":"الأمير عبدالله","north":true,"south":false,"east":true,"west":false,"path":"M524.7,655.3L553.4,717.6L509.6,748.3L508.2,746.1L518.2,738.7L515.6,735.2L521.4,730.8L526.8,730.9L526.9,721.3L524.9,720.5L523.5,716.6L521.6,716.9L513.9,696.1L507.5,698.6L511.3,678.6L509.4,676.4L505.5,678.8L503.9,681.8L502.1,676.5L506.9,655.7L503.3,658.8L492.8,659.4L492.1,664.7L484.1,647.2L514.3,632.3Z","cx":521.2,"cy":683.9,"land":4870,"villa":4090000,"deals":100,"trend":5.1},{"name":"العليا","north":false,"south":true,"east":false,"west":true,"path":"M426.1,732.6L431.6,730.5L434.1,741.2L441.5,757.2L453.5,750.7L446.1,771.4L447.4,776.0L428.7,784.7L400.1,722.1L417.1,713.8Z","cx":426.0,"cy":750.1,"land":4530,"villa":3830000,"deals":102,"trend":5.3}]};
+
+  var svg = document.getElementById('mapSvg');
+  if(!svg) return;
+  svg.setAttribute('viewBox', '0 0 ' + MAP.w + ' ' + MAP.h);
+
+  /* ---- Zoom & pan ---- */
+  var vb = { x: 0, y: 0, w: MAP.w, h: MAP.h };
+  var ZOOM_MIN_SCALE = 0.3;   // most zoomed in
+  var ZOOM_STEP = 0.72;
+  var zoomStage = document.getElementById('mapStage');
+  function applyVB(){ svg.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + vb.h); }
+  function clampPan(){
+    if(vb.w >= MAP.w){ vb.x = 0; } else { vb.x = Math.min(Math.max(vb.x, 0), MAP.w - vb.w); }
+    if(vb.h >= MAP.h){ vb.y = 0; } else { vb.y = Math.min(Math.max(vb.y, 0), MAP.h - vb.h); }
+  }
+  function updatePannableState(){
+    if(zoomStage) zoomStage.classList.toggle('pannable', vb.w < MAP.w - 0.5);
+  }
+  function zoomBy(factor){
+    var newW = Math.min(MAP.w, Math.max(MAP.w * ZOOM_MIN_SCALE, vb.w * factor));
+    var newH = newW * (MAP.h / MAP.w);
+    var cx = vb.x + vb.w / 2, cy = vb.y + vb.h / 2;
+    vb.w = newW; vb.h = newH;
+    vb.x = cx - newW / 2; vb.y = cy - newH / 2;
+    clampPan(); applyVB(); updatePannableState();
+  }
+  var zoomInBtn = document.getElementById('zoomIn');
+  var zoomOutBtn = document.getElementById('zoomOut');
+  var zoomResetBtn = document.getElementById('zoomReset');
+  if(zoomInBtn) zoomInBtn.addEventListener('click', function(){ zoomBy(ZOOM_STEP); });
+  if(zoomOutBtn) zoomOutBtn.addEventListener('click', function(){ zoomBy(1 / ZOOM_STEP); });
+  if(zoomResetBtn) zoomResetBtn.addEventListener('click', function(){ vb = { x:0, y:0, w:MAP.w, h:MAP.h }; applyVB(); updatePannableState(); });
+
+  // drag to pan (mouse + touch) — only active once zoomed in
+  var isPanning = false, panStart = null, vbStart = null, dragMoved = false;
+  function pointerPos(e){ return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : { x: e.clientX, y: e.clientY }; }
+  function startPan(e){
+    if(vb.w >= MAP.w - 0.5) return; // nothing to pan at full extent
+    isPanning = true; dragMoved = false;
+    panStart = pointerPos(e); vbStart = { x: vb.x, y: vb.y };
+    if(zoomStage) zoomStage.classList.add('panning');
+  }
+  function doPan(e){
+    if(!isPanning) return;
+    var p = pointerPos(e);
+    if(Math.abs(p.x - panStart.x) > 3 || Math.abs(p.y - panStart.y) > 3) dragMoved = true;
+    var r = zoomStage.getBoundingClientRect();
+    var scaleX = vb.w / r.width, scaleY = vb.h / r.height;
+    vb.x = vbStart.x - (p.x - panStart.x) * scaleX;
+    vb.y = vbStart.y - (p.y - panStart.y) * scaleY;
+    clampPan(); applyVB();
+    if(dragMoved) e.preventDefault();
+  }
+  function endPan(){ isPanning = false; if(zoomStage) zoomStage.classList.remove('panning'); }
+  if(zoomStage){
+    zoomStage.addEventListener('mousedown', startPan);
+    zoomStage.addEventListener('touchstart', startPan, { passive: true });
+    window.addEventListener('mousemove', doPan);
+    window.addEventListener('touchmove', doPan, { passive: false });
+    window.addEventListener('mouseup', endPan);
+    window.addEventListener('touchend', endPan);
+  }
+
+  var lands = MAP.districts.map(function(d){ return d.land; });
+  var lo = Math.min.apply(null, lands), hi = Math.max.apply(null, lands);
+  function L(a,b,t){ return a + (b-a) * t; }
+  function scaleColor(t){
+    var s1=[31,107,79], s2=[138,160,63], s3=[201,154,63], c;
+    if(t < 0.5){ var u=t/0.5; c=[L(s1[0],s2[0],u),L(s1[1],s2[1],u),L(s1[2],s2[2],u)]; }
+    else{ var u=(t-0.5)/0.5; c=[L(s2[0],s3[0],u),L(s2[1],s3[1],u),L(s2[2],s3[2],u)]; }
+    return 'rgb(' + c.map(Math.round).join(',') + ')';
+  }
+  function area(path){
+    var nums = path.replace(/[MLZ]/g,' ').trim().split(/[\s,]+/).map(Number);
+    var a=0;
+    for(var i=0;i<nums.length-2;i+=2){ var x1=nums[i],y1=nums[i+1],x2=nums[i+2],y2=nums[i+3]; a += x1*y2 - x2*y1; }
+    return Math.abs(a/2);
+  }
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  MAP.districts.forEach(function(d, i){
+    var p = document.createElementNS(SVGNS,'path');
+    p.setAttribute('d', d.path);
+    p.setAttribute('fill', scaleColor((d.land - lo) / (hi - lo || 1)));
+    p.setAttribute('class', 'dist');
+    p.setAttribute('data-i', i);
+    d._area = area(d.path);
+    svg.appendChild(p); d._el = p;
+  });
+  var areas = MAP.districts.map(function(d){ return d._area; }).sort(function(a,b){ return b-a; });
+  var thr = areas[Math.min(areas.length-1, 54)];
+  MAP.districts.forEach(function(d){
+    if(d._area >= thr){
+      var t = document.createElementNS(SVGNS,'text');
+      t.setAttribute('x', d.cx); t.setAttribute('y', d.cy + 3);
+      t.setAttribute('class', 'dlabel'); t.textContent = d.name;
+      svg.appendChild(t);
+    }
+  });
+  var tip = document.getElementById('mapTip'), stage = document.getElementById('mapStage');
+  var empty = document.getElementById('mpEmpty');
+  var fmt = function(n){ return n.toLocaleString('en-US'); };
+  var selected = null;
+
+  function tagsHTML(d){
+    var t = '';
+    t += d.north ? '<span class="mp-tag">شمال الرياض</span>' : '<span class="mp-tag">جنوب الرياض</span>';
+    t += d.east ? '<span class="mp-tag">شرق الرياض</span>' : '<span class="mp-tag">غرب الرياض</span>';
+    return t;
+  }
+  function trendHTML(d){
+    return (d.trend >= 0 ? '▲ +' : '▼ ') + Math.abs(d.trend) + '%';
+  }
+  function fillPanel(prefix, d){
+    var name = document.getElementById('mpName' + prefix);
+    var tags = document.getElementById('mpTags' + prefix);
+    var land = document.getElementById('mpLand' + prefix);
+    var villa = document.getElementById('mpVilla' + prefix);
+    var deals = document.getElementById('mpDeals' + prefix);
+    var trend = document.getElementById('mpTrend' + prefix);
+    if(name) name.textContent = d.name;
+    if(tags) tags.innerHTML = tagsHTML(d);
+    if(land) land.innerHTML = fmt(d.land) + ' <small>ريال/م²</small>';
+    if(villa) villa.innerHTML = (d.villa/1e6).toFixed(2) + ' <small>مليون ريال</small>';
+    if(deals) deals.innerHTML = fmt(d.deals) + ' <small>صفقة</small>';
+    if(trend){ trend.className = 'stat-value v ' + (d.trend >= 0 ? 'up' : 'down'); trend.innerHTML = trendHTML(d); }
+  }
+
+  function select(d){
+    if(selected) selected._el.classList.remove('sel');
+    selected = d; d._el.classList.add('sel');
+    if(empty) empty.style.display = 'none';
+    fillPanel('', d);
+    fillPanel('_m', d);
+    var panelDesktop = document.getElementById('detailPanel');
+    if(panelDesktop) panelDesktop.classList.add('open');
+    var sheet = document.getElementById('detailSheet');
+    var backdrop = document.getElementById('sheetBackdrop');
+    if(window.matchMedia('(max-width: 900px)').matches && sheet){
+      sheet.classList.add('show');
+      if(backdrop) backdrop.classList.add('show');
+    }
+    window.__selectedDistrict = d.name;
+  }
+
+  svg.addEventListener('click', function(e){
+    if(dragMoved){ dragMoved = false; return; } // ignore the click that follows a drag-pan
+    var t = e.target;
+    if(t.classList && t.classList.contains('dist')) select(MAP.districts[+t.getAttribute('data-i')]);
+  });
+  svg.addEventListener('mousemove', function(e){
+    var t = e.target;
+    if(t.classList && t.classList.contains('dist')){
+      var d = MAP.districts[+t.getAttribute('data-i')];
+      var r = stage.getBoundingClientRect();
+      tip.style.left = (e.clientX - r.left) + 'px'; tip.style.top = (e.clientY - r.top) + 'px';
+      tip.innerHTML = d.name + ' · <b>' + fmt(d.land) + '</b> ريال/م²';
+      tip.style.opacity = '1';
+    } else { tip.style.opacity = '0'; }
+  });
+  svg.addEventListener('mouseleave', function(){ tip.style.opacity = '0'; });
+
+  // Close detail panel (desktop)
+  var closeDetailBtn = document.getElementById('closeDetail');
+  if(closeDetailBtn){
+    closeDetailBtn.addEventListener('click', function(){
+      var panelDesktop = document.getElementById('detailPanel');
+      if(panelDesktop) panelDesktop.classList.remove('open');
+      if(selected){ selected._el.classList.remove('sel'); selected = null; }
+      if(empty) empty.style.display = 'block';
+    });
+  }
+
+  // Filter chips: all / north / south / east / west
+  var filterBtns = document.querySelectorAll('#mapFilters .mchip');
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      filterBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      var f = btn.getAttribute('data-f');
+      MAP.districts.forEach(function(d){
+        var show = f === 'all' ||
+          (f === 'north' && d.north) || (f === 'south' && d.south) ||
+          (f === 'east' && d.east) || (f === 'west' && d.west);
+        d._el.classList.toggle('dim', !show);
+      });
+    });
+  });
+
+  // CTA: fill district + open form
+  function ctaFillDistrict(){
+    if(!selected) return;
+    var fDistrict = document.getElementById('fDistrict');
+    if(fDistrict) fDistrict.value = selected.name;
+    // Sync mobile form if exists
+    var mDistrict = document.getElementById('m_fDistrict');
+    if(mDistrict) mDistrict.value = selected.name;
+    if(window.__formAPI){
+      window.__formAPI.setData('district', selected.name);
+      window.__formAPI.refresh();
+    }
+    if(window.innerWidth <= 900){
+      // Close detail sheet, open form sheet
+      var ds = document.getElementById('detailSheet');
+      if(ds) ds.classList.remove('show');
+      var bd = document.getElementById('sheetBackdrop');
+      if(bd) bd.classList.remove('show');
+      setTimeout(function(){
+        var fs = document.getElementById('formSheet');
+        if(fs) fs.classList.add('show');
+        if(bd) bd.classList.add('show');
+      }, 300);
+    } else {
+      if(fDistrict) fDistrict.focus();
+    }
+  }
+  var mpCta = document.getElementById('mpCta');
+  var mpCta_m = document.getElementById('mpCta_m');
+  if(mpCta) mpCta.addEventListener('click', ctaFillDistrict);
+  if(mpCta_m) mpCta_m.addEventListener('click', ctaFillDistrict);
+
+  // Live data override (fetch data.json if available)
+  function recolor(){
+    var ls = MAP.districts.map(function(d){ return d.land; });
+    lo = Math.min.apply(null, ls); hi = Math.max.apply(null, ls);
+    MAP.districts.forEach(function(d){ d._el.setAttribute('fill', scaleColor((d.land - lo) / (hi - lo || 1))); });
+  }
+  fetch('data.json', {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+    if(!j || !j.districts) return;
+    var idx = {}; j.districts.forEach(function(d){ idx[d.name] = d; });
+    MAP.districts.forEach(function(d){
+      var n = idx[d.name];
+      if(n){ if(n.land!=null) d.land = n.land; if(n.villa!=null) d.villa = n.villa;
+             if(n.deals!=null) d.deals = n.deals; if(n.trend!=null) d.trend = n.trend; }
+    });
+    recolor();
+    var demo = document.querySelector('.map-badge.demo');
+    if(demo){ demo.textContent = 'بيانات محدّثة'; demo.classList.add('live'); demo.classList.remove('demo'); }
+    var upd = document.getElementById('mapUpdated');
+    if(upd && j.updated){ upd.textContent = ' · آخر تحديث: ' + j.updated; }
+    if(selected) select(selected);
+  }).catch(function(){});
+
+  window.__MAP = MAP;
+})();
+
+/* ============================================================
+   THEME TOGGLE
+   ============================================================ */
+(function(){
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var sun = document.getElementById('iconSun');
+  var moon = document.getElementById('iconMoon');
+  var stored = localStorage.getItem('or-theme');
+
+  function apply(mode){
+    root.classList.remove('dark','light');
+    root.classList.add(mode);
+    if(mode === 'dark'){ sun.classList.add('hidden'); moon.classList.remove('hidden'); }
+    else { sun.classList.remove('hidden'); moon.classList.add('hidden'); }
+  }
+  if(stored){ apply(stored); }
+  btn.addEventListener('click', function(){
+    var cur = root.classList.contains('dark') ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    apply(next);
+    localStorage.setItem('or-theme', next);
+  });
+})();
+
+/* ============================================================
+   FORM LOGIC — Multi-step
+   ============================================================ */
+(function(){
+  var currentStep = 1;
+  var totalSteps = 3;
+  var data = { purpose: null, type: null, district: '', area: '', price: '', mapLink: '', phone: '' };
+
+  var steps = document.querySelectorAll('#formPanel .step');
+  var dots = document.querySelectorAll('#formPanel .step-dot');
+  var btnNext = document.getElementById('btnNext');
+  var btnBack = document.getElementById('btnBack');
+  var btnSubmit = document.getElementById('btnSubmit');
+
+  ['fPurpose','fType'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var key = id === 'fPurpose' ? 'purpose' : 'type';
+    el.addEventListener('change', function(){
+      data[key] = el.value;
+      updateButtons();
+      updateSummary();
+    });
+  });
+
+  ['fDistrict','fArea','fPrice','fMapLink','fPhone'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var key = id === 'fDistrict' ? 'district' : id === 'fArea' ? 'area' : id === 'fPrice' ? 'price' : id === 'fMapLink' ? 'mapLink' : 'phone';
+    el.addEventListener('input', function(){
+      var val = el.value;
+      if(key === 'phone'){ val = val.replace(/\D/g,'').slice(0,10); el.value = val; }
+      data[key] = val;
+      updateSummary();
+    });
+  });
+
+  function updateButtons(){
+    btnBack.style.display = currentStep > 1 ? 'inline-flex' : 'none';
+    if(currentStep === totalSteps){
+      btnNext.classList.add('hidden');
+      btnSubmit.classList.remove('hidden');
+    } else {
+      btnNext.classList.remove('hidden');
+      btnSubmit.classList.add('hidden');
+    }
+  }
+
+  function showStep(n){
+    currentStep = n;
+    steps.forEach(function(s){
+      s.classList.toggle('active', +s.getAttribute('data-step') === n);
+    });
+    dots.forEach(function(d){
+      var sn = +d.getAttribute('data-step');
+      d.classList.remove('active','done');
+      if(sn === n) d.classList.add('active');
+      else if(sn < n) d.classList.add('done');
+    });
+    updateButtons();
+    if(n === 3) updateSummary();
+  }
+
+  function validateStep(n){
+    if(n === 1){
+      if(!data.purpose || !data.type){ alert('الرجاء اختيار الغرض ونوع العقار'); return false; }
+      return true;
+    }
+    if(n === 2){
+      if(!data.district){ alert('الرجاء تحديد الحي'); return false; }
+      return true;
+    }
+    if(n === 3){
+      var valid = /^05\d{8}$/.test(data.phone);
+      var err = document.getElementById('phoneError');
+      if(!valid){ err.classList.add('show'); return false; }
+      err.classList.remove('show');
+      return true;
+    }
+    return true;
+  }
+
+  function purposeLabel(v){
+    return v === 'sell' ? 'بيع' : v === 'buy' ? 'شراء' : v === 'stuck' ? 'متعثر' : v;
+  }
+  function typeLabel(v){
+    return v === 'villa' ? 'فيلا' : v === 'land' ? 'أرض' : v === 'apartment' ? 'شقة' : v === 'commercial' ? 'تجاري' : v;
+  }
+
+  function updateSummary(){
+    var s = document.getElementById('summary');
+    if(!s) return;
+    var lines = [];
+    if(data.purpose) lines.push('• الغرض: ' + purposeLabel(data.purpose));
+    if(data.type) lines.push('• نوع العقار: ' + typeLabel(data.type));
+    if(data.district) lines.push('• الحي: ' + data.district);
+    if(data.area) lines.push('• المساحة: ' + data.area + ' م²');
+    if(data.price) lines.push('• السعر المطلوب: ' + data.price + ' ريال');
+    if(data.mapLink) lines.push('• رابط الخريطة: موجود');
+    if(data.phone) lines.push('• الجوال: ' + data.phone);
+    s.innerHTML = lines.join('<br>') || '<span style="opacity:0.6;">أكمل البيانات لعرض الملخص</span>';
+  }
+
+  btnNext.addEventListener('click', function(){
+    if(!validateStep(currentStep)) return;
+    if(currentStep < totalSteps) showStep(currentStep + 1);
+  });
+  btnBack.addEventListener('click', function(){
+    if(currentStep > 1) showStep(currentStep - 1);
+  });
+
+  btnSubmit.addEventListener('click', function(){
+    if(!validateStep(3)) return;
+    var msg = 'طلب تحليل سعر عقار\n\n';
+    msg += '• الغرض: ' + purposeLabel(data.purpose) + '\n';
+    msg += '• نوع العقار: ' + typeLabel(data.type) + '\n';
+    msg += '• المدينة: الرياض\n';
+    msg += '• الحي: ' + (data.district || '-') + '\n';
+    if(data.area) msg += '• المساحة: ' + data.area + ' م²\n';
+    if(data.price) msg += '• السعر المطلوب: ' + data.price + ' ريال\n';
+    if(data.mapLink) msg += '• رابط الخريطة: ' + data.mapLink + '\n';
+    msg += '• رقم الجوال: ' + data.phone + '\n';
+    msg += '\n—\nأرسل عبر OwnRiyadh';
+    var url = 'https://wa.me/966555416775?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  });
+
+  showStep(1);
+  updateSummary();
+
+  window.__formAPI = {
+    getData: function(){ return data; },
+    setData: function(k,v){ data[k] = v; },
+    refresh: updateSummary
+  };
+})();
+
+/* ============================================================
+   CAROUSEL
+   ============================================================ */
+(function(){
+  var track = document.getElementById('carouselTrack');
+  var viewport = document.getElementById('carouselViewport');
+  var dotsContainer = document.getElementById('carDots');
+  var prevBtn = document.getElementById('carPrev');
+  var nextBtn = document.getElementById('carNext');
+  var cards = track.querySelectorAll('.carousel-card');
+  var total = cards.length;
+  var index = 0;
+  var autoTimer = null;
+  var paused = false;
+
+  function visibleCount(){
+    var w = viewport.offsetWidth;
+    if(w < 520) return 1;
+    if(w < 900) return 2;
+    return Math.min(5, total);
+  }
+  function maxIndex(){ return Math.max(0, total - visibleCount()); }
+
+  function buildDots(){
+    dotsContainer.innerHTML = '';
+    var max = maxIndex() + 1;
+    for(var i = 0; i < max; i++){
+      var d = document.createElement('button');
+      d.className = 'dot' + (i === index ? ' active' : '');
+      d.setAttribute('aria-label', 'انتقال إلى ' + (i+1));
+      d.addEventListener('click', (function(idx){ return function(){ goTo(idx); }; })(i));
+      dotsContainer.appendChild(d);
+    }
+  }
+
+  function update(){
+    var card = cards[0];
+    var style = getComputedStyle(track);
+    var gap = parseFloat(style.gap) || 14;
+    var cardWidth = card.offsetWidth + gap;
+    var offset = -index * cardWidth;
+    track.style.transform = 'translateX(' + offset + 'px)';
+    var dots = dotsContainer.querySelectorAll('.dot');
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index >= maxIndex();
+  }
+
+  function goTo(i){
+    index = Math.max(0, Math.min(maxIndex(), i));
+    update();
+    restartAuto();
+  }
+  function next(){ goTo(index >= maxIndex() ? 0 : index + 1); }
+  function prev(){ goTo(index <= 0 ? maxIndex() : index - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  function startAuto(){
+    stopAuto();
+    autoTimer = setInterval(function(){ if(!paused) next(); }, 6000);
+  }
+  function stopAuto(){ if(autoTimer){ clearInterval(autoTimer); autoTimer = null; } }
+  function restartAuto(){ stopAuto(); startAuto(); }
+
+  viewport.addEventListener('mouseenter', function(){ paused = true; });
+  viewport.addEventListener('mouseleave', function(){ paused = false; });
+  viewport.addEventListener('touchstart', function(){ paused = true; }, {passive:true});
+  viewport.addEventListener('touchend', function(){ setTimeout(function(){ paused = false; }, 2000); });
+
+  var startX = 0, startY = 0, deltaX = 0, dragging = false, horizontal = null;
+  viewport.addEventListener('pointerdown', function(e){
+    dragging = true; horizontal = null;
+    startX = e.clientX; startY = e.clientY; deltaX = 0;
+    viewport.setPointerCapture(e.pointerId);
+    track.style.transition = 'none';
+  });
+  viewport.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    deltaX = e.clientX - startX;
+    var deltaY = e.clientY - startY;
+    if(horizontal === null) horizontal = Math.abs(deltaX) > Math.abs(deltaY);
+    if(horizontal){
+      var card = cards[0];
+      var style = getComputedStyle(track);
+      var gap = parseFloat(style.gap) || 14;
+      var cardWidth = card.offsetWidth + gap;
+      var baseOffset = -index * cardWidth;
+      track.style.transform = 'translateX(' + (baseOffset + deltaX) + 'px)';
+    }
+  });
+  viewport.addEventListener('pointerup', function(){
+    if(!dragging) return;
+    dragging = false;
+    track.style.transition = '';
+    if(horizontal){
+      var threshold = viewport.offsetWidth * 0.15;
+      if(deltaX > threshold) prev();
+      else if(deltaX < -threshold) next();
+      else update();
+    }
+  });
+  viewport.addEventListener('pointercancel', function(){
+    dragging = false; track.style.transition = ''; update();
+  });
+
+  // CTA buttons in carousel → open form
+  document.querySelectorAll('[data-scroll-form]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if(window.innerWidth <= 900){
+        var fs = document.getElementById('formSheet');
+        var bd = document.getElementById('sheetBackdrop');
+        if(fs) fs.classList.add('show');
+        if(bd) bd.classList.add('show');
+      } else {
+        var input = document.getElementById('fDistrict');
+        if(input) input.focus();
+      }
+    });
+  });
+
+  var resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){
+      if(index > maxIndex()) index = maxIndex();
+      buildDots();
+      update();
+    }, 150);
+  });
+
+  buildDots();
+  update();
+  startAuto();
+})();
+
+/* ============================================================
+   BOTTOM SHEETS (Mobile)
+   ============================================================ */
+var formSheet = document.getElementById('formSheet');
+var detailSheet = document.getElementById('detailSheet');
+var backdrop = document.getElementById('sheetBackdrop');
+var formSheetBody = document.getElementById('formSheetBody');
+
+function openSheet(sheet){
+  backdrop.classList.add('show');
+  sheet.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeSheet(sheet){
+  backdrop.classList.remove('show');
+  sheet.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('openFormSheet').addEventListener('click', function(){
+  openSheet(formSheet);
+});
+
+document.querySelectorAll('[data-close-sheet]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var sheet = btn.closest('.bottom-sheet');
+    closeSheet(sheet);
+  });
+});
+
+backdrop.addEventListener('click', function(){
+  closeSheet(formSheet);
+  closeSheet(detailSheet);
+});
+
+// Clone desktop form into mobile sheet
+(function(){
+  var desktopPanel = document.getElementById('formPanel');
+  if(!desktopPanel || !formSheetBody) return;
+  var clone = desktopPanel.cloneNode(true);
+  clone.removeAttribute('id');
+  clone.classList.remove('form-panel');
+  clone.style.display = 'flex';
+  clone.style.borderRight = 'none';
+  clone.style.background = 'transparent';
+  clone.style.height = 'auto';
+  clone.style.flex = '1';
+  clone.style.minHeight = '0';
+  formSheetBody.appendChild(clone);
+
+  // Re-assign IDs to avoid duplicates (prefix with m_)
+  clone.querySelectorAll('[id]').forEach(function(el){
+    el.id = 'm_' + el.id;
+  });
+
+  var mStepDots = clone.querySelectorAll('.step-dot');
+  var mSteps = clone.querySelectorAll('.step');
+  var mBtnNext = clone.querySelector('#m_btnNext');
+  var mBtnBack = clone.querySelector('#m_btnBack');
+  var mBtnSubmit = clone.querySelector('#m_btnSubmit');
+
+  ['m_fPurpose','m_fType'].forEach(function(id){
+    var el = clone.querySelector('#'+id);
+    if(!el) return;
+    var key = id === 'm_fPurpose' ? 'purpose' : 'type';
+    el.addEventListener('change', function(){
+      window.__formAPI.setData(key, el.value);
+      var dEl = document.getElementById(key === 'purpose' ? 'fPurpose' : 'fType');
+      if(dEl) dEl.value = el.value;
+      window.__formAPI.refresh();
+      updateMobileSummary(clone);
+    });
+  });
+
+  ['m_fDistrict','m_fArea','m_fPrice','m_fMapLink','m_fPhone'].forEach(function(id){
+    var el = clone.querySelector('#'+id);
+    if(!el) return;
+    var key = id === 'm_fDistrict' ? 'district' : id === 'm_fArea' ? 'area' : id === 'm_fPrice' ? 'price' : id === 'm_fMapLink' ? 'mapLink' : 'phone';
+    el.addEventListener('input', function(){
+      var val = el.value;
+      if(key === 'phone'){ val = val.replace(/\D/g,'').slice(0,10); el.value = val; }
+      window.__formAPI.setData(key, val);
+      var dKey = key === 'district' ? 'fDistrict' : key === 'area' ? 'fArea' : key === 'price' ? 'fPrice' : key === 'mapLink' ? 'fMapLink' : 'fPhone';
+      var dEl = document.getElementById(dKey);
+      if(dEl) dEl.value = val;
+      window.__formAPI.refresh();
+      updateMobileSummary(clone);
+    });
+  });
+
+  var currentStep = 1;
+  function showMStep(n){
+    currentStep = n;
+    mSteps.forEach(function(s){
+      s.classList.toggle('active', +s.getAttribute('data-step') === n);
+    });
+    mStepDots.forEach(function(d){
+      var sn = +d.getAttribute('data-step');
+      d.classList.remove('active','done');
+      if(sn === n) d.classList.add('active');
+      else if(sn < n) d.classList.add('done');
+    });
+    mBtnBack.style.display = n > 1 ? 'inline-flex' : 'none';
+    if(n === 3){
+      mBtnNext.classList.add('hidden');
+      mBtnSubmit.classList.remove('hidden');
+      updateMobileSummary(clone);
+    } else {
+      mBtnNext.classList.remove('hidden');
+      mBtnSubmit.classList.add('hidden');
+    }
+  }
+
+  function updateMobileSummary(root){
+    var s = root.querySelector('#m_summary');
+    if(!s) return;
+    var data = window.__formAPI.getData();
+    var purposeLabel = function(v){ return v === 'sell' ? 'بيع' : v === 'buy' ? 'شراء' : v === 'stuck' ? 'متعثر' : v; };
+    var typeLabel = function(v){ return v === 'villa' ? 'فيلا' : v === 'land' ? 'أرض' : v === 'apartment' ? 'شقة' : v === 'commercial' ? 'تجاري' : v; };
+    var lines = [];
+    if(data.purpose) lines.push('• الغرض: ' + purposeLabel(data.purpose));
+    if(data.type) lines.push('• نوع العقار: ' + typeLabel(data.type));
+    if(data.district) lines.push('• الحي: ' + data.district);
+    if(data.area) lines.push('• المساحة: ' + data.area + ' م²');
+    if(data.price) lines.push('• السعر: ' + data.price + ' ريال');
+    if(data.mapLink) lines.push('• رابط الخريطة: موجود');
+    if(data.phone) lines.push('• الجوال: ' + data.phone);
+    s.innerHTML = lines.join('<br>') || '<span style="opacity:0.6;">أكمل البيانات</span>';
+  }
+
+  function validateMStep(n){
+    var data = window.__formAPI.getData();
+    if(n === 1){
+      if(!data.purpose || !data.type){ alert('الرجاء اختيار الغرض ونوع العقار'); return false; }
+      return true;
+    }
+    if(n === 2){
+      if(!data.district){ alert('الرجاء تحديد الحي'); return false; }
+      return true;
+    }
+    if(n === 3){
+      var valid = /^05\d{8}$/.test(data.phone);
+      var err = clone.querySelector('#m_phoneError');
+      if(!valid){ if(err) err.classList.add('show'); return false; }
+      if(err) err.classList.remove('show');
+      return true;
+    }
+    return true;
+  }
+
+  mBtnNext.addEventListener('click', function(){
+    if(!validateMStep(currentStep)) return;
+    if(currentStep < 3) showMStep(currentStep + 1);
+  });
+  mBtnBack.addEventListener('click', function(){
+    if(currentStep > 1) showMStep(currentStep - 1);
+  });
+  mBtnSubmit.addEventListener('click', function(){
+    if(!validateMStep(3)) return;
+    document.getElementById('btnSubmit').click();
+  });
+
+  showMStep(1);
+})();
+</script>
+
+</body>
+</html>
