@@ -602,19 +602,24 @@ html.dark #mapTip { background: var(--gold); color: #0A1A17; }
 
 .carousel-viewport {
   flex: 1;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
   min-height: 0;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
 }
+.carousel-viewport::-webkit-scrollbar { height: 6px; }
+.carousel-viewport::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
 .carousel-track {
   display: flex;
   height: 100%;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   gap: 14px;
   padding: 14px 20px;
 }
 .carousel-card {
   flex: 0 0 calc((100% - 56px) / 5);
+  scroll-snap-align: start;
   min-width: 0;
   background: var(--bg-2);
   border: 1px solid var(--border);
@@ -772,35 +777,6 @@ html.dark .carousel-card.final { background: #1a3d36; }
   flex-shrink: 0;
 }
 
-/* Carousel controls */
-.carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 8px 20px 12px;
-  flex-shrink: 0;
-}
-.carousel-arrow {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--bg-2);
-  color: var(--text);
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.carousel-arrow:hover { background: var(--gold); color: #fff; }
-.carousel-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
-.carousel-arrow svg { width: 14px; height: 14px; }
-.carousel-dots { display: flex; gap: 6px; }
-.dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--border-2);
-  transition: all 0.2s;
-  cursor: pointer;
-}
-.dot.active { background: var(--gold); width: 20px; border-radius: 4px; }
 
 /* ============================================================
    5) MOBILE — Collapsed form + bottom sheets
@@ -867,6 +843,28 @@ html.dark .carousel-card.final { background: #1a3d36; }
   box-shadow: var(--shadow-lg);
 }
 .bottom-sheet.show { transform: translateY(0); }
+
+/* Form sheet opens as a centered modal instead of a bottom drawer */
+#formSheet {
+  top: 50%;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  border-radius: 20px;
+  transform: translate(-50%, -50%) scale(0.94);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+}
+#formSheet.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+#formSheet .sheet-handle { display: none; }
+
 .sheet-handle {
   width: 40px; height: 4px;
   background: var(--border-2);
@@ -1254,16 +1252,6 @@ html.dark .carousel-card.final { background: #1a3d36; }
           </div>
 
         </div>
-      </div>
-
-      <div class="carousel-controls">
-        <button class="carousel-arrow" id="carPrev" aria-label="السابق">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <div class="carousel-dots" id="carDots"></div>
-        <button class="carousel-arrow" id="carNext" aria-label="التالي">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
       </div>
     </div>
 
@@ -1736,108 +1724,7 @@ html.dark .carousel-card.final { background: #1a3d36; }
    CAROUSEL
    ============================================================ */
 (function(){
-  var track = document.getElementById('carouselTrack');
-  var viewport = document.getElementById('carouselViewport');
-  var dotsContainer = document.getElementById('carDots');
-  var prevBtn = document.getElementById('carPrev');
-  var nextBtn = document.getElementById('carNext');
-  var cards = track.querySelectorAll('.carousel-card');
-  var total = cards.length;
-  var index = 0;
-  var autoTimer = null;
-  var paused = false;
-
-  function visibleCount(){
-    var w = viewport.offsetWidth;
-    if(w < 520) return 1;
-    if(w < 900) return 2;
-    return Math.min(5, total);
-  }
-  function maxIndex(){ return Math.max(0, total - visibleCount()); }
-
-  function buildDots(){
-    dotsContainer.innerHTML = '';
-    var max = maxIndex() + 1;
-    for(var i = 0; i < max; i++){
-      var d = document.createElement('button');
-      d.className = 'dot' + (i === index ? ' active' : '');
-      d.setAttribute('aria-label', 'انتقال إلى ' + (i+1));
-      d.addEventListener('click', (function(idx){ return function(){ goTo(idx); }; })(i));
-      dotsContainer.appendChild(d);
-    }
-  }
-
-  function update(){
-    var card = cards[0];
-    var style = getComputedStyle(track);
-    var gap = parseFloat(style.gap) || 14;
-    var cardWidth = card.offsetWidth + gap;
-    var offset = -index * cardWidth;
-    track.style.transform = 'translateX(' + offset + 'px)';
-    var dots = dotsContainer.querySelectorAll('.dot');
-    dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
-    prevBtn.disabled = index === 0;
-    nextBtn.disabled = index >= maxIndex();
-  }
-
-  function goTo(i){
-    index = Math.max(0, Math.min(maxIndex(), i));
-    update();
-    restartAuto();
-  }
-  function next(){ goTo(index >= maxIndex() ? 0 : index + 1); }
-  function prev(){ goTo(index <= 0 ? maxIndex() : index - 1); }
-
-  prevBtn.addEventListener('click', prev);
-  nextBtn.addEventListener('click', next);
-
-  function startAuto(){
-    stopAuto();
-    autoTimer = setInterval(function(){ if(!paused) next(); }, 6000);
-  }
-  function stopAuto(){ if(autoTimer){ clearInterval(autoTimer); autoTimer = null; } }
-  function restartAuto(){ stopAuto(); startAuto(); }
-
-  viewport.addEventListener('mouseenter', function(){ paused = true; });
-  viewport.addEventListener('mouseleave', function(){ paused = false; });
-  viewport.addEventListener('touchstart', function(){ paused = true; }, {passive:true});
-  viewport.addEventListener('touchend', function(){ setTimeout(function(){ paused = false; }, 2000); });
-
-  var startX = 0, startY = 0, deltaX = 0, dragging = false, horizontal = null;
-  viewport.addEventListener('pointerdown', function(e){
-    dragging = true; horizontal = null;
-    startX = e.clientX; startY = e.clientY; deltaX = 0;
-    viewport.setPointerCapture(e.pointerId);
-    track.style.transition = 'none';
-  });
-  viewport.addEventListener('pointermove', function(e){
-    if(!dragging) return;
-    deltaX = e.clientX - startX;
-    var deltaY = e.clientY - startY;
-    if(horizontal === null) horizontal = Math.abs(deltaX) > Math.abs(deltaY);
-    if(horizontal){
-      var card = cards[0];
-      var style = getComputedStyle(track);
-      var gap = parseFloat(style.gap) || 14;
-      var cardWidth = card.offsetWidth + gap;
-      var baseOffset = -index * cardWidth;
-      track.style.transform = 'translateX(' + (baseOffset + deltaX) + 'px)';
-    }
-  });
-  viewport.addEventListener('pointerup', function(){
-    if(!dragging) return;
-    dragging = false;
-    track.style.transition = '';
-    if(horizontal){
-      var threshold = viewport.offsetWidth * 0.15;
-      if(deltaX > threshold) prev();
-      else if(deltaX < -threshold) next();
-      else update();
-    }
-  });
-  viewport.addEventListener('pointercancel', function(){
-    dragging = false; track.style.transition = ''; update();
-  });
+  // Carousel is now a static, manually-scrollable row (no auto-play, no drag-slide, no arrows).
 
   // CTA buttons in carousel → open form
   document.querySelectorAll('[data-scroll-form]').forEach(function(btn){
@@ -1853,20 +1740,6 @@ html.dark .carousel-card.final { background: #1a3d36; }
       }
     });
   });
-
-  var resizeTimer;
-  window.addEventListener('resize', function(){
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function(){
-      if(index > maxIndex()) index = maxIndex();
-      buildDots();
-      update();
-    }, 150);
-  });
-
-  buildDots();
-  update();
-  startAuto();
 })();
 
 /* ============================================================
@@ -1912,6 +1785,7 @@ backdrop.addEventListener('click', function(){
   clone.removeAttribute('id');
   clone.classList.remove('form-panel');
   clone.style.display = 'flex';
+  clone.style.flexDirection = 'column';
   clone.style.borderRight = 'none';
   clone.style.background = 'transparent';
   clone.style.height = 'auto';
