@@ -86,6 +86,7 @@ html, body { height: 100%; overflow: hidden; }
   --bg-2: #F3ECDC;
   --gold: #B4924B;
   --gold-2: #9a7a3a;
+  --gold-text: #876D38;
   --text: #0F2E29;
   --muted: #5a6b67;
   --card: #ffffff;
@@ -109,6 +110,7 @@ html, body { height: 100%; overflow: hidden; }
     --bg-2: #0F2520;
     --gold: #C9A85E;
     --gold-2: #d9b970;
+    --gold-text: #C9A85E;
     --text: #FAF6EE;
     --muted: #9fb0ab;
     --card: #132925;
@@ -128,6 +130,7 @@ html.dark {
   --bg-2: #0F2520;
   --gold: #C9A85E;
   --gold-2: #d9b970;
+  --gold-text: #C9A85E;
   --text: #FAF6EE;
   --muted: #9fb0ab;
   --card: #132925;
@@ -186,7 +189,7 @@ a { color: inherit; text-decoration: none; }
 }
 .logo .own { color: var(--green); }
 html.dark .logo .own { color: #E8DFC7; }
-.logo .riyadh { color: var(--gold); }
+.logo .riyadh { color: var(--gold-text); }
 
 .header-actions { display: flex; gap: 8px; align-items: center; }
 .icon-btn {
@@ -279,7 +282,7 @@ html.dark .step-dot.done { background: var(--gold); }
 
 .step-label {
   font-size: 12px;
-  color: var(--gold);
+  color: var(--gold-text);
   font-weight: 700;
   margin-bottom: 6px;
   letter-spacing: 0.3px;
@@ -709,7 +712,7 @@ html.dark #mapTip { background: var(--gold); color: #0A1A17; }
   width: 26px; height: 26px;
   border-radius: 50%;
   background: var(--card);
-  color: var(--gold);
+  color: var(--gold-text);
   font-size: 12px;
   font-weight: 800;
   display: flex; align-items: center; justify-content: center;
@@ -748,7 +751,7 @@ html.dark #mapTip { background: var(--gold); color: #0A1A17; }
   content: '•';
   position: absolute;
   right: 0;
-  color: var(--gold);
+  color: var(--gold-text);
   font-weight: 800;
 }
 .card-cta {
@@ -766,7 +769,7 @@ html.dark #mapTip { background: var(--gold); color: #0A1A17; }
 .card-cta:hover { background: var(--gold-2); }
 .card-cta.ghost {
   background: transparent;
-  color: var(--gold);
+  color: var(--gold-text);
   border: 1.5px solid var(--gold);
 }
 .card-cta.ghost:hover { background: var(--gold); color: #fff; }
@@ -1241,7 +1244,7 @@ html.dark .carousel-card.final { background: #1a3d36; }
                 <li>نحلل لك سعر السوق بناءً على بيانات الصفقات</li>
                 <li>تستلم التحليل على واتساب خلال دقائق</li>
               </ul>
-              <p style="margin-top:8px;font-weight:700;color:var(--gold);">وكل هذا مجانًا.</p>
+              <p style="margin-top:8px;font-weight:700;color:var(--gold-text);">وكل هذا مجانًا.</p>
             </div>
           </div>
 
@@ -1825,6 +1828,11 @@ backdrop.addEventListener('click', function(){
   // Re-assign IDs to avoid duplicates (prefix with m_)
   clone.querySelectorAll('[id]').forEach(function(el){
     el.id = 'm_' + el.id;
+  });
+
+  // Keep <label for="..."> pointing at the re-prefixed ids (screen reader association)
+  clone.querySelectorAll('label[for]').forEach(function(lbl){
+    lbl.setAttribute('for', 'm_' + lbl.getAttribute('for'));
   });
 
   var mStepDots = clone.querySelectorAll('.step-dot');
