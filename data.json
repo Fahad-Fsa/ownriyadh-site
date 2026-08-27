@@ -1,0 +1,349 @@
+{
+  "updated": "2026 Q2 (وزارة العدل والسجل العقاري / REGA)",
+  "source": "rei.rega.gov.sa",
+  "districts": [
+    {
+      "name": "الجنادرية",
+      "land": 1856,
+      "villa": 936859,
+      "deals": 171,
+      "trend": 11.5
+    },
+    {
+      "name": "الرمال",
+      "land": 2363,
+      "villa": 1407904,
+      "deals": 311,
+      "trend": 31.3
+    },
+    {
+      "name": "الشفا",
+      "land": 1491,
+      "villa": 1093833,
+      "deals": 42,
+      "trend": -29.3
+    },
+    {
+      "name": "العارض",
+      "land": 4526,
+      "villa": 2815870,
+      "deals": 199,
+      "trend": -5.9
+    },
+    {
+      "name": "العزيزية",
+      "land": 2618,
+      "villa": 1148174,
+      "deals": 75,
+      "trend": 0
+    },
+    {
+      "name": "القيروان",
+      "land": 6838,
+      "villa": 3558975,
+      "deals": 93,
+      "trend": -25.6
+    },
+    {
+      "name": "الملقا",
+      "land": 8990,
+      "villa": 5354896,
+      "deals": 50,
+      "trend": -20.2
+    },
+    {
+      "name": "المهدية",
+      "land": 2336,
+      "villa": 2296582,
+      "deals": 94,
+      "trend": -22
+    },
+    {
+      "name": "النرجس",
+      "land": 5979,
+      "villa": 3511442,
+      "deals": 220,
+      "trend": 36.1
+    },
+    {
+      "name": "النسيم الغربي",
+      "land": 2132,
+      "villa": 1207340,
+      "deals": 51,
+      "trend": 4.8
+    },
+    {
+      "name": "النظيم",
+      "land": 1427,
+      "villa": 1046763,
+      "deals": 234,
+      "trend": -2.7
+    },
+    {
+      "name": "النهضة",
+      "land": 4031,
+      "villa": 2153761,
+      "deals": 80,
+      "trend": 6.7
+    },
+    {
+      "name": "بدر",
+      "land": 1484,
+      "villa": 1113179,
+      "deals": 70,
+      "trend": 7.6
+    },
+    {
+      "name": "طويق - العتيقة",
+      "land": 1960,
+      "villa": 1076683,
+      "deals": 137,
+      "trend": 44.4
+    },
+    {
+      "name": "طويق - عرقة",
+      "land": 1960,
+      "villa": 1076683,
+      "deals": 137,
+      "trend": 44.4
+    },
+    {
+      "name": "طيبة",
+      "land": 1320,
+      "villa": 502864,
+      "deals": 457,
+      "trend": 1.1
+    },
+    {
+      "name": "ظهرة لبن",
+      "land": 2853,
+      "villa": 1577501,
+      "deals": 73,
+      "trend": -4.9
+    },
+    {
+      "name": "عريض",
+      "land": 711,
+      "villa": 545071,
+      "deals": 327,
+      "trend": -4.8
+    },
+    {
+      "name": "عكاظ",
+      "land": 1458,
+      "villa": 1362143,
+      "deals": 47,
+      "trend": -0.9
+    },
+    {
+      "name": "نمار",
+      "land": 2518,
+      "villa": null,
+      "deals": 12,
+      "trend": -30.5
+    },
+    {
+      "name": "الجزيرة",
+      "land": 1171,
+      "villa": 928271,
+      "deals": 39,
+      "trend": 24.3
+    },
+    {
+      "name": "عريجاء الغربي",
+      "land": 2541,
+      "villa": 1024221,
+      "deals": 58,
+      "trend": 12.8
+    },
+    {
+      "name": "المصفاة",
+      "land": 984,
+      "villa": null,
+      "deals": 32,
+      "trend": -13.7
+    },
+    {
+      "name": "ديراب",
+      "land": 1335,
+      "villa": 533816,
+      "deals": 75,
+      "trend": -2.9
+    },
+    {
+      "name": "غرناطة",
+      "land": 5019,
+      "villa": null,
+      "deals": 49,
+      "trend": 57.6
+    },
+    {
+      "name": "منفوحة",
+      "land": 3594,
+      "villa": null,
+      "deals": 23,
+      "trend": 29.1
+    },
+    {
+      "name": "الشميسي",
+      "land": 1814,
+      "villa": null,
+      "deals": 23,
+      "trend": 41.8
+    },
+    {
+      "name": "الصفا",
+      "land": 2840,
+      "villa": null,
+      "deals": 168,
+      "trend": 0.6
+    },
+    {
+      "name": "العود",
+      "land": 3746,
+      "villa": null,
+      "deals": 19,
+      "trend": 5.8
+    },
+    {
+      "name": "الفاروق",
+      "land": 3348,
+      "villa": 1476720,
+      "deals": 94,
+      "trend": 6.4
+    },
+    {
+      "name": "اليمامة",
+      "land": 2016,
+      "villa": 796455,
+      "deals": 43,
+      "trend": 2.1
+    },
+    {
+      "name": "غبيرة",
+      "land": 2447,
+      "villa": null,
+      "deals": 20,
+      "trend": 0.5
+    },
+    {
+      "name": "منفوحة الجديدة",
+      "land": 2542,
+      "villa": null,
+      "deals": 23,
+      "trend": -1
+    },
+    {
+      "name": "إشبيلية",
+      "land": null,
+      "villa": 1761732,
+      "deals": 30,
+      "trend": null
+    },
+    {
+      "name": "الحزم",
+      "land": null,
+      "villa": 1223304,
+      "deals": 19,
+      "trend": null
+    },
+    {
+      "name": "الخليج",
+      "land": null,
+      "villa": 1663977,
+      "deals": 25,
+      "trend": null
+    },
+    {
+      "name": "الدار البيضاء",
+      "land": null,
+      "villa": 947313,
+      "deals": 36,
+      "trend": null
+    },
+    {
+      "name": "الروضة",
+      "land": null,
+      "villa": 2505635,
+      "deals": 21,
+      "trend": null
+    },
+    {
+      "name": "السويدي",
+      "land": null,
+      "villa": 1089661,
+      "deals": 19,
+      "trend": null
+    },
+    {
+      "name": "العليا",
+      "land": null,
+      "villa": 3467631,
+      "deals": 29,
+      "trend": null
+    },
+    {
+      "name": "القادسية",
+      "land": null,
+      "villa": 1666375,
+      "deals": 22,
+      "trend": null
+    },
+    {
+      "name": "المونسية",
+      "land": null,
+      "villa": 1994690,
+      "deals": 38,
+      "trend": null
+    },
+    {
+      "name": "الياسمين",
+      "land": null,
+      "villa": 2424447,
+      "deals": 42,
+      "trend": null
+    },
+    {
+      "name": "اليرموك",
+      "land": null,
+      "villa": 1797074,
+      "deals": 23,
+      "trend": null
+    },
+    {
+      "name": "عرقة",
+      "land": null,
+      "villa": 3047615,
+      "deals": 23,
+      "trend": null
+    },
+    {
+      "name": "الأندلس",
+      "land": null,
+      "villa": 1730103,
+      "deals": 18,
+      "trend": null
+    },
+    {
+      "name": "الربوة",
+      "land": null,
+      "villa": 2135857,
+      "deals": 21,
+      "trend": null
+    },
+    {
+      "name": "المصيف",
+      "land": null,
+      "villa": 3220563,
+      "deals": 18,
+      "trend": null
+    },
+    {
+      "name": "ظهرة البديعة",
+      "land": null,
+      "villa": 1346141,
+      "deals": 18,
+      "trend": null
+    }
+  ]
+}
